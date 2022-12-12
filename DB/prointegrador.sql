@@ -27,4 +27,16 @@ CREATE TABLE `admins` (
    `contraseña` varchar(50) NOT NULL,
    PRIMARY KEY (`id`),
    UNIQUE KEY `identificacion_UNIQUE` (`identificacion`)
- ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+ ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+ 
+ CREATE TABLE `proveedores` (
+   `id` int NOT NULL AUTO_INCREMENT,
+   `codigo` varchar(45) NOT NULL,
+   `nombre` varchar(45) NOT NULL,
+   `producto` varchar(45) NOT NULL,
+   `precio` varchar(45) NOT NULL,
+   `cantidad` varchar(45) NOT NULL,
+   PRIMARY KEY (`id`),
+   UNIQUE KEY `codigo_UNIQUE` (`codigo`),
+   UNIQUE KEY `producto_UNIQUE` (`producto`)
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

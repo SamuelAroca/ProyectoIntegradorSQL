@@ -167,7 +167,7 @@ public class Login extends javax.swing.JFrame {
                     if(Objects.equals(comboTipoUser.getSelectedItem(), "Cliente")) {
                         dispose();
                         JFrame frameTienda = new Tienda();
-                        frameTienda.setResizable(true);
+                        frameTienda.setResizable(false);
                         frameTienda.setSize(1346,805);
                         frameTienda.setLocationRelativeTo(null);
                         frameTienda.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -175,7 +175,7 @@ public class Login extends javax.swing.JFrame {
                     } else if(Objects.equals(comboTipoUser.getSelectedItem(), "Administrador")) {
                         dispose();
                         JFrame frameAdmin = new Admins();
-                        frameAdmin.setResizable(true);
+                        frameAdmin.setResizable(false);
                         frameAdmin.setSize(1346,805);
                         frameAdmin.setLocationRelativeTo(null);
                         frameAdmin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

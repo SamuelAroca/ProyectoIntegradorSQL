@@ -38,7 +38,7 @@ public class AdminProductsR extends javax.swing.JPanel {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/TitleBar.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/TitleBarAgregar.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1080, -1));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/BtnCo.png"))); // NOI18N
@@ -124,7 +124,7 @@ public class AdminProductsR extends javax.swing.JPanel {
         txtBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 490, 120, 30));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/admins/Productos (2).png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/admins/Productos.png"))); // NOI18N
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 140, -1, -1));
 
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1073, 767));
@@ -138,7 +138,7 @@ public class AdminProductsR extends javax.swing.JPanel {
                 try {
                     Conexion objCon = new Conexion();
                     Connection conn = objCon.getConection();
-                    ps = conn.prepareStatement("INSERT INTO productos (codigo, nombre, precio, cantidad) VALUES (?,?,?,?)");
+                    ps = conn.prepareStatement("INSERT INTO productos (id_producto, nombre, precio, cantidad) VALUES (?,?,?,?)");
                     ps.setString(1, txtCode.getText());
                     ps.setString(2, txtName.getText());
                     ps.setString(3, txtPrice.getText());
@@ -226,7 +226,7 @@ public class AdminProductsR extends javax.swing.JPanel {
             Conexion objCon = new Conexion();
             Connection conn = objCon.getConection();
             
-            String sql = "SELECT codigo, nombre, precio, cantidad from productos where codigo LIKE '%" + tabla + "'";
+            String sql = "SELECT id_producto, nombre, precio, cantidad from productos where id_producto LIKE '%" + tabla + "'";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             
@@ -261,7 +261,7 @@ public class AdminProductsR extends javax.swing.JPanel {
         String campo = txtBuscar.getText();
         String where = "";
         if (!"".equals(campo)) {
-            where = "WHERE codigo = '" + campo + "'";
+            where = "WHERE id_producto = '" + campo + "'";
         }
 
         try {
@@ -273,7 +273,7 @@ public class AdminProductsR extends javax.swing.JPanel {
             Conexion conn = new Conexion();
             Connection con = conn.getConection();
 
-            String sql = "SELECT codigo, nombre, precio, cantidad FROM productos " + where;
+            String sql = "SELECT id_producto, nombre, precio, cantidad FROM productos " + where;
             System.out.println(sql);
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();

@@ -18,7 +18,6 @@ public class AdminProductsEC extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -34,14 +33,12 @@ public class AdminProductsEC extends javax.swing.JPanel {
         comboTipo = new javax.swing.JComboBox<>();
         btnBuscar = new javax.swing.JButton();
         txtBuscar = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/TitleBar (1).png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1080, -1));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/BtnCo.png"))); // NOI18N
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, -1));
@@ -130,8 +127,11 @@ public class AdminProductsEC extends javax.swing.JPanel {
         txtBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 550, 120, 30));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/admins/Productos (2).png"))); // NOI18N
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 140, -1, -1));
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/TitleBarModificar.png"))); // NOI18N
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1080, -1));
+
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/admins/Productos.png"))); // NOI18N
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 140, -1, -1));
 
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1075, 767));
     }// </editor-fold>//GEN-END:initComponents
@@ -151,7 +151,7 @@ public class AdminProductsEC extends javax.swing.JPanel {
             int fila = tblProducts.getSelectedRow();
             String codigo = tblProducts.getValueAt(fila, 0).toString();
             
-            ps = conn.prepareStatement("DELETE FROM productos WHERE codigo=?");
+            ps = conn.prepareStatement("DELETE FROM productos WHERE id_producto=?");
             ps.setString(1, codigo);
             ps.execute();
             if(Objects.equals(comboTipo.getSelectedItem(), "Todos")) {
@@ -193,7 +193,7 @@ public class AdminProductsEC extends javax.swing.JPanel {
             int fila = tblProducts.getSelectedRow();
             String codigo = tblProducts.getValueAt(fila, 0).toString();
             
-            ps = conn.prepareStatement("SELECT codigo, nombre, precio, cantidad FROM productos WHERE codigo=?");
+            ps = conn.prepareStatement("SELECT id_producto, nombre, precio, cantidad FROM productos WHERE id_producto=?");
             ps.setString(1, codigo);
             rs = ps.executeQuery();
             
@@ -252,7 +252,7 @@ public class AdminProductsEC extends javax.swing.JPanel {
             Conexion objCon = new Conexion();
             Connection conn = objCon.getConection();
             
-            String sql = "SELECT codigo, nombre, precio, cantidad from productos where codigo LIKE '%" + tabla + "'";
+            String sql = "SELECT id_producto, nombre, precio, cantidad from productos where id_producto LIKE '%" + tabla + "'";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             
@@ -289,7 +289,7 @@ public class AdminProductsEC extends javax.swing.JPanel {
         String where = "";
         
         if(!"".equals(campo)) {
-            where = "WHERE codigo = '" + campo + "'";
+            where = "WHERE id_producto = '" + campo + "'";
         }
         
         try {
@@ -300,7 +300,7 @@ public class AdminProductsEC extends javax.swing.JPanel {
             Conexion objCon = new Conexion();
             Connection conn = objCon.getConection();
             
-            String sql = "SELECT codigo, nombre, precio, cantidad from productos " + where;
+            String sql = "SELECT id_producto, nombre, precio, cantidad from productos " + where;
             System.out.println(sql);
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -343,7 +343,7 @@ public class AdminProductsEC extends javax.swing.JPanel {
                     PreparedStatement ps = null;
                     Conexion objCon = new Conexion();
                     Connection conn = objCon.getConection();
-                    ps = conn.prepareStatement("UPDATE productos set codigo=?, nombre=?, precio=?, cantidad=? where codigo=?");
+                    ps = conn.prepareStatement("UPDATE productos set id_producto=?, nombre=?, precio=?, cantidad=? where id_producto=?");
                     ps.setString(1, txtCode.getText());
                     ps.setString(2, txtName.getText());
                     ps.setString(3, txtPrice.getText());
@@ -416,8 +416,8 @@ public class AdminProductsEC extends javax.swing.JPanel {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JComboBox<String> comboTipo;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
