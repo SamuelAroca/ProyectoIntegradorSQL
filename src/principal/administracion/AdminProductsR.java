@@ -38,7 +38,7 @@ public class AdminProductsR extends javax.swing.JPanel {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/TitleBarAgregar.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/TitleBar.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1080, -1));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/BtnCo.png"))); // NOI18N
@@ -72,7 +72,7 @@ public class AdminProductsR extends javax.swing.JPanel {
                 btnAgregarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 380, 120, 50));
+        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 370, 120, 50));
 
         tblProducts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -107,7 +107,7 @@ public class AdminProductsR extends javax.swing.JPanel {
                 comboTipoItemStateChanged(evt);
             }
         });
-        jPanel1.add(comboTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 450, 150, 30));
+        jPanel1.add(comboTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 550, 140, 30));
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/Buscar.png"))); // NOI18N
         btnBuscar.setBorder(null);
@@ -118,11 +118,11 @@ public class AdminProductsR extends javax.swing.JPanel {
                 btnBuscarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 550, -1, -1));
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 430, -1, -1));
 
         txtBuscar.setToolTipText("Solo Codigo");
         txtBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 620, 120, 30));
+        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 490, 120, 30));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/admins/Productos (2).png"))); // NOI18N
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 140, -1, -1));
@@ -171,7 +171,11 @@ public class AdminProductsR extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(null, "Error al Guardar Producto");
                     System.out.println(ex);
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Por favor digite bien los datos");
             }    
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor rellene todos los espacios");
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 

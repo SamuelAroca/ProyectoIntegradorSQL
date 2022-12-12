@@ -34,12 +34,13 @@ public class AdminProductsEC extends javax.swing.JPanel {
         comboTipo = new javax.swing.JComboBox<>();
         btnBuscar = new javax.swing.JButton();
         txtBuscar = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/TitleBarModificar.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/TitleBar (1).png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1080, -1));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/BtnCo.png"))); // NOI18N
@@ -68,7 +69,7 @@ public class AdminProductsEC extends javax.swing.JPanel {
                 btnActualizarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 150, 130, 50));
+        jPanel1.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 370, 120, 50));
 
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/Eliminar.png"))); // NOI18N
         btnEliminar.setBorderPainted(false);
@@ -79,7 +80,7 @@ public class AdminProductsEC extends javax.swing.JPanel {
                 btnEliminarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 230, 130, 50));
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 430, 120, 50));
 
         tblProducts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -112,7 +113,7 @@ public class AdminProductsEC extends javax.swing.JPanel {
                 comboTipoItemStateChanged(evt);
             }
         });
-        jPanel1.add(comboTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 320, 140, 30));
+        jPanel1.add(comboTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 610, 120, 30));
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/Buscar.png"))); // NOI18N
         btnBuscar.setBorder(null);
@@ -123,11 +124,14 @@ public class AdminProductsEC extends javax.swing.JPanel {
                 btnBuscarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 460, -1, -1));
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 490, -1, -1));
 
         txtBuscar.setToolTipText("Solo Codigo");
         txtBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 530, 120, 30));
+        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 550, 120, 30));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/admins/Productos (2).png"))); // NOI18N
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 140, -1, -1));
 
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1075, 767));
     }// </editor-fold>//GEN-END:initComponents
@@ -139,7 +143,6 @@ public class AdminProductsEC extends javax.swing.JPanel {
 
     //Elimina productos de la tabla
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        DefaultTableModel modelo = new DefaultTableModel();
         PreparedStatement ps = null;
         try {
             Conexion objCon = new Conexion();
@@ -151,8 +154,26 @@ public class AdminProductsEC extends javax.swing.JPanel {
             ps = conn.prepareStatement("DELETE FROM productos WHERE codigo=?");
             ps.setString(1, codigo);
             ps.execute();
+            if(Objects.equals(comboTipo.getSelectedItem(), "Todos")) {
+                rellenarTablaProducto();
+                txtBuscar.setText(null);
+            }
+            else if(Objects.equals(comboTipo.getSelectedItem(), "Granolas")) {
+                rellenarTabla("1");
+            }
+            else if(Objects.equals(comboTipo.getSelectedItem(), "Cereales")) {
+                rellenarTabla("2");
+            }
+            else if(Objects.equals(comboTipo.getSelectedItem(), "Avenas")) {
+               rellenarTabla("3"); 
+            }
+            else if(Objects.equals(comboTipo.getSelectedItem(), "Bebidas")) {
+                rellenarTabla("4");
+            }
+            else if(Objects.equals(comboTipo.getSelectedItem(), "Otros")) {
+                rellenarTabla("5");
+            }
             
-            modelo.removeRow(fila);
             JOptionPane.showMessageDialog(null, "Producto Eliminado");
             limpiar();
             
@@ -212,7 +233,13 @@ public class AdminProductsEC extends javax.swing.JPanel {
     }//GEN-LAST:event_comboTipoItemStateChanged
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        rellenarTablaProducto();
+        String campo = txtBuscar.getText();
+        if ("".equals(campo)) {
+            comboTipo.setSelectedIndex(0);
+            rellenarTablaProducto();
+        } else {
+            rellenarTablaProducto();
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
     //Carga los datos en la tabla
     private void rellenarTabla(String tabla){
@@ -263,7 +290,7 @@ public class AdminProductsEC extends javax.swing.JPanel {
         
         if(!"".equals(campo)) {
             where = "WHERE codigo = '" + campo + "'";
-        } 
+        }
         
         try {
             tblProducts.setModel(modelo);
@@ -390,6 +417,7 @@ public class AdminProductsEC extends javax.swing.JPanel {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JComboBox<String> comboTipo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
