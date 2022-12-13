@@ -16,6 +16,7 @@ public class Tienda extends javax.swing.JFrame {
         showPanel(pt);
         cerrar();
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -132,27 +133,27 @@ public class Tienda extends javax.swing.JFrame {
             dispose();
             JFrame frameMain = new Login();
             frameMain.setResizable(false);
-            frameMain.setSize(1073,767);
+            frameMain.setSize(1073, 767);
             frameMain.setLocationRelativeTo(null);
             frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frameMain.setVisible(true);
             bw.close();
         } catch (IOException ex) {
             Logger.getLogger(Tienda.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
     }//GEN-LAST:event_butonRegresarActionPerformed
 
     //Cambia los paneles de la tienda
     private void showPanel(JPanel p) {
-        p.setSize(1078,767);
-        p.setLocation(0,0);
-        
+        p.setSize(1078, 767);
+        p.setLocation(0, 0);
+
         content.removeAll();
-        content.add(p,BorderLayout.CENTER);
+        content.add(p, BorderLayout.CENTER);
         content.revalidate();
         content.repaint();
     }
-    
+
     //Metodo para borrar o no el carrito
     private void cerrar() {
         try {
@@ -172,13 +173,13 @@ public class Tienda extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }
-    
+
     //Confirma la salida del usuario
     public void confirmarSalida() throws IOException {
-        int valor = JOptionPane.showConfirmDialog(this, "¿Esta seguro de cerrar la aplicación?","Advertencia",JOptionPane.YES_NO_OPTION);
-        
+        int valor = JOptionPane.showConfirmDialog(this, "¿Esta seguro de cerrar la aplicación?", "Advertencia", JOptionPane.YES_NO_OPTION);
+
         if (valor == JOptionPane.YES_OPTION) {
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter("carrito.txt"))) {
+            try ( BufferedWriter bw = new BufferedWriter(new FileWriter("carrito.txt"))) {
                 bw.write("");
                 System.exit(0);
             }

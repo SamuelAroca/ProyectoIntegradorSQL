@@ -10,11 +10,12 @@ import principal.administracion.Tienda.Tienda;
 import principal.admins.Admins;
 
 public class Login extends javax.swing.JFrame {
-   
+
     public Login() {
         initComponents();
         rootPane.setDefaultButton(btnLogin);
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -130,17 +131,16 @@ public class Login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     //Inicion de Sesión
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        
+
         String tabla = "";
-            
-        if(Objects.equals(comboTipoUser.getSelectedItem(), "Cliente")) {
+
+        if (Objects.equals(comboTipoUser.getSelectedItem(), "Cliente")) {
             tabla = "users";
             loguear(tabla);
-        }
-        else if(Objects.equals(comboTipoUser.getSelectedItem(), "Administrador")) {
+        } else if (Objects.equals(comboTipoUser.getSelectedItem(), "Administrador")) {
             tabla = "admins";
             loguear(tabla);
         } else {
@@ -164,19 +164,19 @@ public class Login extends javax.swing.JFrame {
                 rs = ps.executeQuery();
 
                 if (rs.next()) {
-                    if(Objects.equals(comboTipoUser.getSelectedItem(), "Cliente")) {
+                    if (Objects.equals(comboTipoUser.getSelectedItem(), "Cliente")) {
                         dispose();
                         JFrame frameTienda = new Tienda();
                         frameTienda.setResizable(false);
-                        frameTienda.setSize(1346,805);
+                        frameTienda.setSize(1346, 805);
                         frameTienda.setLocationRelativeTo(null);
                         frameTienda.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         frameTienda.setVisible(true);
-                    } else if(Objects.equals(comboTipoUser.getSelectedItem(), "Administrador")) {
+                    } else if (Objects.equals(comboTipoUser.getSelectedItem(), "Administrador")) {
                         dispose();
                         JFrame frameAdmin = new Admins();
                         frameAdmin.setResizable(false);
-                        frameAdmin.setSize(1346,805);
+                        frameAdmin.setSize(1346, 805);
                         frameAdmin.setLocationRelativeTo(null);
                         frameAdmin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         frameAdmin.setVisible(true);
@@ -189,16 +189,16 @@ public class Login extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Porfavor Rellene todos los espacios");
             }
-        } catch (SQLException ex){
-            
-        }    
+        } catch (SQLException ex) {
+
+        }
     }
 //Dirige al Frame Contactos
     private void btnContacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContacActionPerformed
         dispose();
         JFrame frameContacto = new Contactos();
         frameContacto.setResizable(false);
-        frameContacto.setSize(1073,767);
+        frameContacto.setSize(1073, 767);
         frameContacto.setLocationRelativeTo(null);
         frameContacto.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameContacto.setVisible(true);
@@ -217,7 +217,7 @@ public class Login extends javax.swing.JFrame {
         dispose();
         JFrame frameMain = new PantallaMain();
         frameMain.setResizable(false);
-        frameMain.setSize(1073,767);
+        frameMain.setSize(1073, 767);
         frameMain.setLocationRelativeTo(null);
         frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameMain.setVisible(true);

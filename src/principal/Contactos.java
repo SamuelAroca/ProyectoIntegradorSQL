@@ -1,16 +1,16 @@
 package principal;
 
-import principal.logANDres.*;
 import java.io.*;
 import java.util.logging.*;
 import javax.swing.*;
+import principal.logANDres.*;
 
 public class Contactos extends javax.swing.JFrame {
 
     public Contactos() {
         initComponents();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -144,7 +144,7 @@ public class Contactos extends javax.swing.JFrame {
         dispose();
         JFrame frameMain = new PantallaMain();
         frameMain.setResizable(false);
-        frameMain.setSize(1073,807);
+        frameMain.setSize(1073, 807);
         frameMain.setLocationRelativeTo(null);
         frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameMain.setVisible(true);
@@ -178,7 +178,7 @@ public class Contactos extends javax.swing.JFrame {
     }//GEN-LAST:event_instaMouseClicked
     //Redirecciona la Pagina oficial de Facebook 
     private void faceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_faceMouseClicked
-       try {
+        try {
             PantallaMain main = new PantallaMain();
             main.enlace("https://www.facebook.com/vitarricooficial");
         } catch (IOException ex) {

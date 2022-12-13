@@ -4,14 +4,14 @@ import javax.swing.*;
 import principal.logANDres.Registro;
 
 public class PassWordAdmin extends javax.swing.JFrame {
-    
+
     private static final String PassWord = "hola123";
 
     public PassWordAdmin() {
         rootPane.setDefaultButton(botonAcceder);
         initComponents();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -63,7 +63,7 @@ public class PassWordAdmin extends javax.swing.JFrame {
             dispose();
             JFrame frameRegisAdmins = new RegistroAdmins();
             frameRegisAdmins.setResizable(false);
-            frameRegisAdmins.setSize(1073,767);
+            frameRegisAdmins.setSize(1073, 767);
             frameRegisAdmins.setLocationRelativeTo(null);
             frameRegisAdmins.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frameRegisAdmins.setVisible(true);
@@ -76,12 +76,12 @@ public class PassWordAdmin extends javax.swing.JFrame {
         dispose();
         JFrame frameRegistro = new Registro();
         frameRegistro.setResizable(false);
-        frameRegistro.setSize(1073,767);
+        frameRegistro.setSize(1073, 767);
         frameRegistro.setLocationRelativeTo(null);
         frameRegistro.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameRegistro.setVisible(true);
     }//GEN-LAST:event_regresarActionPerformed
-  
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonAcceder;
     private javax.swing.JLabel jLabel1;

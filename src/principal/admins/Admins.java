@@ -119,7 +119,7 @@ public class Admins extends javax.swing.JFrame {
         frameLogin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameLogin.setVisible(true);
     }//GEN-LAST:event_btnRegresarActionPerformed
-    
+
     //Nos cierra el programa
     private void salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirActionPerformed
         dispose();
@@ -131,14 +131,14 @@ public class Admins extends javax.swing.JFrame {
         JPanel p3 = new AdminProveedores();
         changePanels(p3);
     }//GEN-LAST:event_btnAdminPEActionPerformed
-    
+
     //Metodo para cambiar los paneles del Frame
     private void changePanels(JPanel p) {
-        p.setSize(1075,767);
-        p.setLocation(0,0);
-        
+        p.setSize(1075, 767);
+        p.setLocation(0, 0);
+
         content.removeAll();
-        content.add(p,BorderLayout.CENTER);
+        content.add(p, BorderLayout.CENTER);
         content.revalidate();
         content.repaint();
     }

@@ -6,14 +6,13 @@ import java.net.*;
 import java.util.logging.*;
 import javax.swing.*;
 import principal.*;
-import java.sql.*;
 
 public class PantallaMain extends javax.swing.JFrame {
 
     public PantallaMain() {
         initComponents();
     }
-    
+
     //Metodos para abrir los enlaces 
     public void enlace(String enlaceAAceder) throws IOException {
         Desktop enlace = Desktop.getDesktop();
@@ -23,18 +22,17 @@ public class PantallaMain extends javax.swing.JFrame {
             Logger.getLogger(PantallaMain.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void enlacePubli(String enlaceAAceder) {
         Desktop enlace = Desktop.getDesktop();
         try {
             enlace.browse(new URI(enlaceAAceder));
 
-        }catch (IOException | URISyntaxException e) {
+        } catch (IOException | URISyntaxException e) {
             e.getMessage();
         }
     }
-    
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -131,29 +129,29 @@ public class PantallaMain extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     //Abre el Frame Login
     private void botonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonLoginActionPerformed
         dispose();
         JFrame frameLog = new Login();
         frameLog.setResizable(false);
-        frameLog.setSize(1073,767);
+        frameLog.setSize(1073, 767);
         frameLog.setLocationRelativeTo(null);
         frameLog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameLog.setVisible(true);
     }//GEN-LAST:event_botonLoginActionPerformed
-    
+
     //Abre el Frame Registro
     private void botonRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRegistroActionPerformed
         dispose();
         JFrame frameRegistro = new Registro();
         frameRegistro.setResizable(false);
-        frameRegistro.setSize(1073,767);
+        frameRegistro.setSize(1073, 767);
         frameRegistro.setLocationRelativeTo(null);
         frameRegistro.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameRegistro.setVisible(true);
     }//GEN-LAST:event_botonRegistroActionPerformed
-    
+
     //Redirecciona a la pagina oficial de Vitarrico
     private void labelLogoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelLogoMouseClicked
         try {
@@ -163,23 +161,23 @@ public class PantallaMain extends javax.swing.JFrame {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_labelLogoMouseClicked
-    
+
     //Abre un video de Vitarrico
     private void labelVideoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelVideoMouseClicked
         enlacePubli("https://youtu.be/WWbjMbjcvt0");
     }//GEN-LAST:event_labelVideoMouseClicked
-    
+
     //Abre el Frame Contactos
     private void botonContactosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_botonContactosMouseClicked
         dispose();
         JFrame frameContacto = new Contactos();
         frameContacto.setResizable(false);
-        frameContacto.setSize(1035,767);
+        frameContacto.setSize(1035, 767);
         frameContacto.setLocationRelativeTo(null);
         frameContacto.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameContacto.setVisible(true);
     }//GEN-LAST:event_botonContactosMouseClicked
-    
+
     //Cierra el programa
     private void salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirActionPerformed
         dispose();

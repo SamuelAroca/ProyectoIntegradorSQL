@@ -8,11 +8,12 @@ import principal.Contactos;
 import principal.logANDres.*;
 
 public class RegistroAdmins extends javax.swing.JFrame {
-    
+
     public RegistroAdmins() {
         initComponents();
         rootPane.setDefaultButton(btnRegis);
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -135,9 +136,9 @@ public class RegistroAdmins extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisActionPerformed
-        
+
         if (!txtID.getText().isEmpty() && !txtName.getText().isEmpty() && !txtPassword.getText().isEmpty()) {
-            
+
             try {
                 Conexion objCon = new Conexion();
                 Connection conn = objCon.getConection();
@@ -147,22 +148,22 @@ public class RegistroAdmins extends javax.swing.JFrame {
                 ps.setString(1, txtID.getText());
                 ps.setString(2, txtName.getText());
                 ps.setString(3, txtPassword.getText());
-                
+
                 int res = ps.executeUpdate();
-                
+
                 if (res > 0) {
                     JOptionPane.showMessageDialog(null, "Asministrador Guardado como: " + txtName.getText());
                     dispose();
                     JFrame frameLog = new Login();
                     frameLog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    frameLog.setSize(1073,767);
+                    frameLog.setSize(1073, 767);
                     frameLog.setLocationRelativeTo(null);
                     frameLog.setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "Error al guardar persona");
                     limpiarCajas();
                 }
-            } catch(SQLException e){
+            } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         } else {
@@ -175,12 +176,12 @@ public class RegistroAdmins extends javax.swing.JFrame {
         txtName.setText(null);
         txtPassword.setText(null);
     }
-    
+
     private void btnContacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContacActionPerformed
         dispose();
         JFrame frameContacto = new Contactos();
         frameContacto.setResizable(false);
-        frameContacto.setSize(1073,767);
+        frameContacto.setSize(1073, 767);
         frameContacto.setLocationRelativeTo(null);
         frameContacto.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameContacto.setVisible(true);
@@ -199,7 +200,7 @@ public class RegistroAdmins extends javax.swing.JFrame {
         dispose();
         JFrame frameLog = new Login();
         frameLog.setResizable(false);
-        frameLog.setSize(1073,767);
+        frameLog.setSize(1073, 767);
         frameLog.setLocationRelativeTo(null);
         frameLog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameLog.setVisible(true);
@@ -209,7 +210,7 @@ public class RegistroAdmins extends javax.swing.JFrame {
         dispose();
         JFrame frameRegistro = new Registro();
         frameRegistro.setResizable(false);
-        frameRegistro.setSize(1073,767);
+        frameRegistro.setSize(1073, 767);
         frameRegistro.setLocationRelativeTo(null);
         frameRegistro.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameRegistro.setVisible(true);

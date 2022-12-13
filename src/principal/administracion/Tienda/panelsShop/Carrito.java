@@ -7,10 +7,10 @@ import javax.swing.table.DefaultTableModel;
 import principal.administracion.AdminProductsEC;
 
 public class Carrito extends javax.swing.JPanel {
-    
+
     DefaultTableModel dtm;
     int filaSeleccionada;
-    
+
     public Carrito() {
         initComponents();
         dtm = (DefaultTableModel) tblProducts.getModel();
@@ -150,26 +150,28 @@ public class Carrito extends javax.swing.JPanel {
         File file = new File(filePath);
         int resultado = 0;
         int sumador = 0;
-        
+
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
-            
-            while((linea = br.readLine()) != null) {
+
+            while ((linea = br.readLine()) != null) {
                 linea2 = linea.split(" ");
                 int total = Integer.parseInt(linea2[2]);
                 int total2 = Integer.parseInt(linea2[3]);
                 resultado = total * total2;
                 sumador += resultado;
             }
-            JOptionPane.showMessageDialog(null, "¡¡¡Gracias por su compra!!!" + "\n" + "  Su total es: " + sumador + " Pesos");
-            
+            JOptionPane.showMessageDialog(null, """
+                                                \u00a1\u00a1\u00a1Gracias por su compra!!!
+                                                  Su total es: """ + sumador + " Pesos");
+
             BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
             bw.write("");
             bw.close();
             dtm.getDataVector().removeAllElements();
             tblProducts.updateUI();
-            
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(AdminProductsEC.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -195,36 +197,36 @@ public class Carrito extends javax.swing.JPanel {
                 tblProducts.setValueAt(txtAmount.getText(), filaSeleccionada, 3);
                 limpiar();
                 filaSeleccionada = -1;
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "No has seleccionado ningun dato");
             }
             actualizarTabla();
         } else {
-            JOptionPane.showMessageDialog(null, "Digite la cantidad en números","Advertencia",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Digite la cantidad en números", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        int fila= tblProducts.getSelectedRow();
-        if (fila >= 0){
+        int fila = tblProducts.getSelectedRow();
+        if (fila >= 0) {
             dtm.removeRow(fila);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Seleccionar Fila");
         }
         actualizarTabla();
         limpiar();
     }//GEN-LAST:event_btnEliminarActionPerformed
-    
-    private void actualizarTabla(){
+
+    private void actualizarTabla() {
         String filePath = "carrito.txt";
         File file = new File(filePath);
         try {
             FileWriter fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
-            
-            for(int i = 0; i < tblProducts.getRowCount(); i++){
-                for(int j = 0; j < tblProducts.getColumnCount(); j++){
-                    bw.write(tblProducts.getValueAt(i, j).toString()+" ");
+
+            for (int i = 0; i < tblProducts.getRowCount(); i++) {
+                for (int j = 0; j < tblProducts.getColumnCount(); j++) {
+                    bw.write(tblProducts.getValueAt(i, j).toString() + " ");
                 }
                 bw.newLine();
             }
@@ -234,18 +236,18 @@ public class Carrito extends javax.swing.JPanel {
             Logger.getLogger(AdminProductsEC.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private void cargarDatos(){
+
+    private void cargarDatos() {
         String filePath = "carrito.txt";
         File file = new File(filePath);
-        
+
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
-            
-            DefaultTableModel model = (DefaultTableModel)tblProducts.getModel();
+
+            DefaultTableModel model = (DefaultTableModel) tblProducts.getModel();
             Object[] lines = br.lines().toArray();
-            
+
             for (Object line : lines) {
                 String[] row = line.toString().split(" ");
                 model.addRow(row);
@@ -254,14 +256,14 @@ public class Carrito extends javax.swing.JPanel {
             Logger.getLogger(AdminProductsEC.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void limpiar(){
+
+    public void limpiar() {
         txtCode.setText(null);
         txtName.setText(null);
         txtPrice.setText(null);
         txtAmount.setText(null);
     }
-    
+
     public static boolean validarCantidad(String cantidad) {
         return cantidad.matches("^[0-9]+$");
     }

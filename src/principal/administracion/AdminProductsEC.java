@@ -7,7 +7,7 @@ import javax.swing.table.*;
 import principal.logANDres.*;
 
 public class AdminProductsEC extends javax.swing.JPanel {
-    
+
     public AdminProductsEC() {
         initComponents();
         rellenarTablaProducto();
@@ -79,22 +79,6 @@ public class AdminProductsEC extends javax.swing.JPanel {
         });
         jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 430, 120, 50));
 
-        tblProducts.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Código", "nombre", "Precio", "Cantidad"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
         tblProducts.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblProductsMouseClicked(evt);
@@ -104,7 +88,7 @@ public class AdminProductsEC extends javax.swing.JPanel {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 450, 850, 300));
 
-        comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Granolas", "Cereales", "Avenas", "Bebidas", "Otros" }));
+        comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "1. Granolas", "2. Cereales", "3. Avenas", "4. Bebidas", "5. Otros" }));
         comboTipo.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 comboTipoItemStateChanged(evt);
@@ -147,36 +131,31 @@ public class AdminProductsEC extends javax.swing.JPanel {
         try {
             Conexion objCon = new Conexion();
             Connection conn = objCon.getConection();
-            
+
             int fila = tblProducts.getSelectedRow();
             String codigo = tblProducts.getValueAt(fila, 0).toString();
-            
+
             ps = conn.prepareStatement("DELETE FROM productos WHERE id_producto=?");
             ps.setString(1, codigo);
             ps.execute();
-            if(Objects.equals(comboTipo.getSelectedItem(), "Todos")) {
+            if (Objects.equals(comboTipo.getSelectedItem(), "Todos")) {
                 rellenarTablaProducto();
                 txtBuscar.setText(null);
-            }
-            else if(Objects.equals(comboTipo.getSelectedItem(), "Granolas")) {
+            } else if (Objects.equals(comboTipo.getSelectedItem(), "1. Granolas")) {
                 rellenarTabla("1");
-            }
-            else if(Objects.equals(comboTipo.getSelectedItem(), "Cereales")) {
+            } else if (Objects.equals(comboTipo.getSelectedItem(), "2. Cereales")) {
                 rellenarTabla("2");
-            }
-            else if(Objects.equals(comboTipo.getSelectedItem(), "Avenas")) {
-               rellenarTabla("3"); 
-            }
-            else if(Objects.equals(comboTipo.getSelectedItem(), "Bebidas")) {
+            } else if (Objects.equals(comboTipo.getSelectedItem(), "3. Avenas")) {
+                rellenarTabla("3");
+            } else if (Objects.equals(comboTipo.getSelectedItem(), "4. Bebidas")) {
                 rellenarTabla("4");
-            }
-            else if(Objects.equals(comboTipo.getSelectedItem(), "Otros")) {
+            } else if (Objects.equals(comboTipo.getSelectedItem(), "5. Otros")) {
                 rellenarTabla("5");
             }
-            
+
             JOptionPane.showMessageDialog(null, "Producto Eliminado");
             limpiar();
-            
+
         } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
@@ -189,14 +168,14 @@ public class AdminProductsEC extends javax.swing.JPanel {
         try {
             Conexion objCon = new Conexion();
             Connection conn = objCon.getConection();
-            
+
             int fila = tblProducts.getSelectedRow();
             String codigo = tblProducts.getValueAt(fila, 0).toString();
-            
+
             ps = conn.prepareStatement("SELECT id_producto, nombre, precio, cantidad FROM productos WHERE id_producto=?");
             ps.setString(1, codigo);
             rs = ps.executeQuery();
-            
+
             while (rs.next()) {
                 txtCode.setText(rs.getString("Codigo"));
                 txtName.setText(rs.getString("Nombre"));
@@ -211,23 +190,18 @@ public class AdminProductsEC extends javax.swing.JPanel {
     //Cambia la tabla dependiendo el tipo de producto que elijan
     private void comboTipoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboTipoItemStateChanged
         //Opciones del comboBox
-        if(Objects.equals(comboTipo.getSelectedItem(), "Todos")) {
+        if (Objects.equals(comboTipo.getSelectedItem(), "Todos")) {
             rellenarTablaProducto();
             txtBuscar.setText(null);
-        }
-        else if(Objects.equals(comboTipo.getSelectedItem(), "Granolas")) {
+        } else if (Objects.equals(comboTipo.getSelectedItem(), "1. Granolas")) {
             rellenarTabla("1");
-        }
-        else if(Objects.equals(comboTipo.getSelectedItem(), "Cereales")) {
+        } else if (Objects.equals(comboTipo.getSelectedItem(), "2. Cereales")) {
             rellenarTabla("2");
-        }
-        else if(Objects.equals(comboTipo.getSelectedItem(), "Avenas")) {
-           rellenarTabla("3"); 
-        }
-        else if(Objects.equals(comboTipo.getSelectedItem(), "Bebidas")) {
+        } else if (Objects.equals(comboTipo.getSelectedItem(), "3. Avenas")) {
+            rellenarTabla("3");
+        } else if (Objects.equals(comboTipo.getSelectedItem(), "4. Bebidas")) {
             rellenarTabla("4");
-        }
-        else if(Objects.equals(comboTipo.getSelectedItem(), "Otros")) {
+        } else if (Objects.equals(comboTipo.getSelectedItem(), "5. Otros")) {
             rellenarTabla("5");
         }
     }//GEN-LAST:event_comboTipoItemStateChanged
@@ -242,38 +216,38 @@ public class AdminProductsEC extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
     //Carga los datos en la tabla
-    private void rellenarTabla(String tabla){
+    private void rellenarTabla(String tabla) {
         DefaultTableModel modelo = new DefaultTableModel();
         try {
             tblProducts.setModel(modelo);
-            
+
             PreparedStatement ps = null;
             ResultSet rs = null;
             Conexion objCon = new Conexion();
             Connection conn = objCon.getConection();
-            
+
             String sql = "SELECT id_producto, nombre, precio, cantidad from productos where id_producto LIKE '%" + tabla + "'";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
-            
+
             ResultSetMetaData rsMd = rs.getMetaData();
             int cantidadColumnas = rsMd.getColumnCount();
-            
+
             modelo.addColumn("Codigo");
             modelo.addColumn("Nombre");
             modelo.addColumn("Precio");
             modelo.addColumn("Cantidad");
-            
-            int[] anchos = {50,200,50,50}; 
-            
+
+            int[] anchos = {50, 200, 50, 50};
+
             for (int x = 0; x < cantidadColumnas; x++) {
                 tblProducts.getColumnModel().getColumn(x).setPreferredWidth(anchos[x]);
             }
-            
+
             while (rs.next()) {
-                
+
                 Object[] filas = new Object[cantidadColumnas];
-                
+
                 for (int i = 0; i < cantidadColumnas; i++) {
                     filas[i] = rs.getObject(i + 1);
                 }
@@ -283,46 +257,47 @@ public class AdminProductsEC extends javax.swing.JPanel {
             System.err.println(ex.toString());
         }
     }
-    private void rellenarTablaProducto(){
+
+    private void rellenarTablaProducto() {
         DefaultTableModel modelo = new DefaultTableModel();
         String campo = txtBuscar.getText();
         String where = "";
-        
-        if(!"".equals(campo)) {
+
+        if (!"".equals(campo)) {
             where = "WHERE id_producto = '" + campo + "'";
         }
-        
+
         try {
             tblProducts.setModel(modelo);
-            
+
             PreparedStatement ps = null;
             ResultSet rs = null;
             Conexion objCon = new Conexion();
             Connection conn = objCon.getConection();
-            
+
             String sql = "SELECT id_producto, nombre, precio, cantidad from productos " + where;
             System.out.println(sql);
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
-            
+
             ResultSetMetaData rsMd = rs.getMetaData();
             int cantidadColumnas = rsMd.getColumnCount();
-            
+
             modelo.addColumn("Codigo");
             modelo.addColumn("Nombre");
             modelo.addColumn("Precio");
             modelo.addColumn("Cantidad");
-            
-            int[] anchos = {50,200,50,50}; 
-            
+
+            int[] anchos = {50, 200, 50, 50};
+
             for (int x = 0; x < cantidadColumnas; x++) {
                 tblProducts.getColumnModel().getColumn(x).setPreferredWidth(anchos[x]);
             }
-            
+
             while (rs.next()) {
-                
+
                 Object[] filas = new Object[cantidadColumnas];
-                
+
                 for (int i = 0; i < cantidadColumnas; i++) {
                     filas[i] = rs.getObject(i + 1);
                 }
@@ -332,10 +307,10 @@ public class AdminProductsEC extends javax.swing.JPanel {
             System.err.println(ex.toString());
         }
     }
-    
+
     //Actualiza la tabla
     private void actualizar() {
-        
+
         if (!txtCode.getText().isEmpty() && !txtName.getText().isEmpty() && !txtPrice.getText().isEmpty() && !txtAmount.getText().isEmpty()) {
             if (validarCodigo(txtCode.getText()) && validarNombre(txtName.getText()) && validarPrecio(txtPrice.getText()) && validarCantidad(txtAmount.getText())) {
 
@@ -354,23 +329,18 @@ public class AdminProductsEC extends javax.swing.JPanel {
 
                     if (res > 0) {
                         JOptionPane.showMessageDialog(null, "Producto Modificado");
-                        if(Objects.equals(comboTipo.getSelectedItem(), "Todos")) {
+                        if (Objects.equals(comboTipo.getSelectedItem(), "Todos")) {
                             rellenarTablaProducto();
                             txtBuscar.setText(null);
-                        }
-                        else if(Objects.equals(comboTipo.getSelectedItem(), "Granolas")) {
+                        } else if (Objects.equals(comboTipo.getSelectedItem(), "1. Granolas")) {
                             rellenarTabla("1");
-                        }
-                        else if(Objects.equals(comboTipo.getSelectedItem(), "Cereales")) {
+                        } else if (Objects.equals(comboTipo.getSelectedItem(), "2. Cereales")) {
                             rellenarTabla("2");
-                        }
-                        else if(Objects.equals(comboTipo.getSelectedItem(), "Avenas")) {
-                           rellenarTabla("3"); 
-                        }
-                        else if(Objects.equals(comboTipo.getSelectedItem(), "Bebidas")) {
+                        } else if (Objects.equals(comboTipo.getSelectedItem(), "3. Avenas")) {
+                            rellenarTabla("3");
+                        } else if (Objects.equals(comboTipo.getSelectedItem(), "4. Bebidas")) {
                             rellenarTabla("4");
-                        }
-                        else if(Objects.equals(comboTipo.getSelectedItem(), "Otros")) {
+                        } else if (Objects.equals(comboTipo.getSelectedItem(), "5. Otros")) {
                             rellenarTabla("5");
                         }
                         limpiar();
@@ -385,29 +355,31 @@ public class AdminProductsEC extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(null, "Digite bien los datos");
             }
         } else {
-                JOptionPane.showMessageDialog(null, "Por favor rellene todos los espacios");
+            JOptionPane.showMessageDialog(null, "Por favor rellene todos los espacios");
         }
     }
-    
+
     //Limpia los Label de datos
-    public void limpiar(){
+    public void limpiar() {
         txtCode.setText(null);
         txtName.setText(null);
         txtPrice.setText(null);
         txtAmount.setText(null);
     }
+
     //Verifican que el usuario no digite mal un dato
     public static boolean validarCodigo(String codigo) {
         return codigo.matches("^[A-Za-z0-9]+[-]{1}[1-5]{1}");
     }
+
     public static boolean validarNombre(String nombre) {
         return nombre.matches("^([A-ZÁ-Ú]{1}[a-z0-9A-ZñÑá-ú ]+)$");
     }
-    
+
     public static boolean validarPrecio(String precio) {
         return precio.matches("^[0-9]{3}[0-9]+$");
     }
-    
+
     public static boolean validarCantidad(String cantidad) {
         return cantidad.matches("^[0-9]+$");
     }

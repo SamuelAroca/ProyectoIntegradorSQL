@@ -8,7 +8,7 @@ import principal.Contactos;
 import principal.admins.PassWordAdmin;
 
 public class Registro extends javax.swing.JFrame {
-    
+
     public Registro() {
         initComponents();
         rootPane.setDefaultButton(btnRegis);
@@ -156,66 +156,66 @@ public class Registro extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     //Registro de Usuarios
     private void btnRegisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisActionPerformed
-            try {
-                PreparedStatement ps;
-                ResultSet rs;
-                if (!txtID.getText().isEmpty() && !txtName.getText().isEmpty() && !txtPassword.getText().isEmpty()) {
-                    if (validarId(txtID.getText())) {
-                        if (validarNombre(txtName.getText())) {
-                            Conexion objCon = new Conexion();
-                            Connection conn = objCon.getConection();
+        try {
+            PreparedStatement ps;
+            ResultSet rs;
+            if (!txtID.getText().isEmpty() && !txtName.getText().isEmpty() && !txtPassword.getText().isEmpty()) {
+                if (validarId(txtID.getText())) {
+                    if (validarNombre(txtName.getText())) {
+                        Conexion objCon = new Conexion();
+                        Connection conn = objCon.getConection();
 
-                            ps = conn.prepareStatement("SELECT identificacion FROM users where identificacion = ? union all select identificacion from admins where identificacion = ?");
-                            ps.setString(1, txtID.getText());
-                            ps.setString(2, txtID.getText());
-                            rs = ps.executeQuery();
+                        ps = conn.prepareStatement("SELECT identificacion FROM users where identificacion = ? union all select identificacion from admins where identificacion = ?");
+                        ps.setString(1, txtID.getText());
+                        ps.setString(2, txtID.getText());
+                        rs = ps.executeQuery();
 
-                            if (rs.next()) {
-                                JOptionPane.showMessageDialog(null, "El usuario ya se encuentra registrado");
-                                txtID.setText(null);
-                            } else {
-                                ps = conn.prepareStatement("INSERT INTO users (identificacion, nombre, contraseña) VALUES(?,?,?)");
-                                ps.setString(1, txtID.getText());
-                                ps.setString(2, txtName.getText());
-                                ps.setString(3, txtPassword.getText());
-
-                                int res = ps.executeUpdate();
-
-                                if (res > 0) {
-                                    JOptionPane.showMessageDialog(null, "Usuario Guardado como: " + txtName.getText());
-                                    dispose();
-                                    JFrame frameLog = new Login();
-                                    frameLog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                                    frameLog.setSize(1073,767);
-                                    frameLog.setLocationRelativeTo(null);
-                                    frameLog.setVisible(true);
-                                } else {
-                                    JOptionPane.showMessageDialog(null, "Error al guardar persona");
-                                    limpiarCajas();
-                                }
-                            }
+                        if (rs.next()) {
+                            JOptionPane.showMessageDialog(null, "El usuario ya se encuentra registrado");
+                            txtID.setText(null);
                         } else {
-                            JOptionPane.showMessageDialog(null, "Digite un Nombre validao\n Mayúscula Inicial");
-                        }     
+                            ps = conn.prepareStatement("INSERT INTO users (identificacion, nombre, contraseña) VALUES(?,?,?)");
+                            ps.setString(1, txtID.getText());
+                            ps.setString(2, txtName.getText());
+                            ps.setString(3, txtPassword.getText());
+
+                            int res = ps.executeUpdate();
+
+                            if (res > 0) {
+                                JOptionPane.showMessageDialog(null, "Usuario Guardado como: " + txtName.getText());
+                                dispose();
+                                JFrame frameLog = new Login();
+                                frameLog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                                frameLog.setSize(1073, 767);
+                                frameLog.setLocationRelativeTo(null);
+                                frameLog.setVisible(true);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Error al guardar persona");
+                                limpiarCajas();
+                            }
+                        }
                     } else {
-                        JOptionPane.showMessageDialog(null, "Digite un ID validao\n 5 numerós minimo");
-                    }   
+                        JOptionPane.showMessageDialog(null, "Digite un Nombre validao\n Mayúscula Inicial");
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Por favor rellene todos los espacios");
+                    JOptionPane.showMessageDialog(null, "Digite un ID validao\n 5 numerós minimo");
                 }
-            } catch(SQLException e){
-                JOptionPane.showMessageDialog(null, e);
+            } else {
+                JOptionPane.showMessageDialog(null, "Por favor rellene todos los espacios");
             }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_btnRegisActionPerformed
 
     private void btnContacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContacActionPerformed
         dispose();
         JFrame frameContacto = new Contactos();
         frameContacto.setResizable(false);
-        frameContacto.setSize(1073,767);
+        frameContacto.setSize(1073, 767);
         frameContacto.setLocationRelativeTo(null);
         frameContacto.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameContacto.setVisible(true);
@@ -229,23 +229,23 @@ public class Registro extends javax.swing.JFrame {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_lblLogoMouseClicked
-    
+
     private void botonRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRegresarActionPerformed
         dispose();
-        JFrame frameMain = new PantallaMain();  
+        JFrame frameMain = new PantallaMain();
         frameMain.setResizable(false);
-        frameMain.setSize(1073,807);
+        frameMain.setSize(1073, 807);
         frameMain.setLocationRelativeTo(null);
         frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameMain.setVisible(true);
     }//GEN-LAST:event_botonRegresarActionPerformed
-    
+
     //Redirige al usuario al Login
     private void labelRegresar4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelRegresar4MouseClicked
         dispose();
         JFrame frameLog = new Login();
         frameLog.setResizable(false);
-        frameLog.setSize(1073,767);
+        frameLog.setSize(1073, 767);
         frameLog.setLocationRelativeTo(null);
         frameLog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameLog.setVisible(true);
@@ -255,7 +255,7 @@ public class Registro extends javax.swing.JFrame {
         dispose();
         JFrame frameAdmin = new PassWordAdmin();
         frameAdmin.setResizable(false);
-        frameAdmin.setSize(400,302);
+        frameAdmin.setSize(400, 302);
         frameAdmin.setLocationRelativeTo(null);
         frameAdmin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frameAdmin.setVisible(true);
@@ -272,9 +272,11 @@ public class Registro extends javax.swing.JFrame {
         txtName.setText(null);
         txtPassword.setText(null);
     }
+
     public static boolean validarNombre(String nombre) {
         return nombre.matches("^([A-ZÁ-Ú]{1}[a-z0-9A-ZñÑá-ú ]+)$");
     }
+
     public static boolean validarId(String id) {
         return id.matches("^[0-9]{5}+");
     }

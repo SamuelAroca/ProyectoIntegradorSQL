@@ -12,10 +12,10 @@ public class PanelTienda extends javax.swing.JPanel {
 
     DefaultTableModel dtm;
     Object[] o = new Object[4];
-    
+
     public PanelTienda() {
         initComponents();
-        
+
         //Cargamos la tabla granolas y evitamos que el usuario pueda modificar datos ya definidos
         dtm = (DefaultTableModel) tblProducts.getModel();
         cargarDatos("granolas.txt");
@@ -23,6 +23,7 @@ public class PanelTienda extends javax.swing.JPanel {
         txtCode.setEditable(false);
         txtName.setEditable(false);
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -139,7 +140,7 @@ public class PanelTienda extends javax.swing.JPanel {
             String cantidad;
 
             try {
-                FileWriter fw = new FileWriter(file,true);
+                FileWriter fw = new FileWriter(file, true);
                 BufferedWriter bw = new BufferedWriter(fw);
 
                 codigo = txtCode.getText();
@@ -154,7 +155,7 @@ public class PanelTienda extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(null, "¡¡¡Producto agregado al carrito Satisfactoriamente!!!");
                     limpiar();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Porfavor ponga la cantidad a comprar","WARNING_MESSAGE", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Porfavor ponga la cantidad a comprar", "WARNING_MESSAGE", JOptionPane.WARNING_MESSAGE);
                 }
                 bw.close();
                 fw.close();
@@ -162,7 +163,7 @@ public class PanelTienda extends javax.swing.JPanel {
                 Logger.getLogger(AdminProductsEC.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Digite la cantidad en números","Advertencia",JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Digite la cantidad en números", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -179,57 +180,57 @@ public class PanelTienda extends javax.swing.JPanel {
         dtm.getDataVector().removeAllElements();
         tblProducts.updateUI();
 
-        if(Objects.equals(comboTipo.getSelectedItem(), "Granolas")) {
+        if (Objects.equals(comboTipo.getSelectedItem(), "Granolas")) {
             dtm = (DefaultTableModel) tblProducts.getModel();
             cargarDatos("granolas.txt");
         }
-        if(Objects.equals(comboTipo.getSelectedItem(), "Cereales")) {
+        if (Objects.equals(comboTipo.getSelectedItem(), "Cereales")) {
             dtm = (DefaultTableModel) tblProducts.getModel();
             cargarDatos("cereales.txt");
         }
-        if(Objects.equals(comboTipo.getSelectedItem(), "Avenas")) {
+        if (Objects.equals(comboTipo.getSelectedItem(), "Avenas")) {
             dtm = (DefaultTableModel) tblProducts.getModel();
             cargarDatos("avenas.txt");
         }
-        if(Objects.equals(comboTipo.getSelectedItem(), "Bebidas")) {
+        if (Objects.equals(comboTipo.getSelectedItem(), "Bebidas")) {
             dtm = (DefaultTableModel) tblProducts.getModel();
             cargarDatos("bebidas.txt");
         }
-        if(Objects.equals(comboTipo.getSelectedItem(), "Otros")) {
+        if (Objects.equals(comboTipo.getSelectedItem(), "Otros")) {
             dtm = (DefaultTableModel) tblProducts.getModel();
             cargarDatos("otros.txt");
         }
         limpiar();
     }//GEN-LAST:event_comboTipoItemStateChanged
-    
+
     //Carga los datos de la tabla
-    private void cargarDatos(String filePath){
+    private void cargarDatos(String filePath) {
         File file = new File(filePath);
-        
+
         try {
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
-            
-            DefaultTableModel model = (DefaultTableModel)tblProducts.getModel();
+
+            DefaultTableModel model = (DefaultTableModel) tblProducts.getModel();
             Object[] lines = br.lines().toArray();
-            
+
             for (Object line : lines) {
                 String[] row = line.toString().split(" ");
                 model.addRow(row);
-            }          
+            }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(AdminProductsR.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     //Limpia los Label
-    private void limpiar(){
+    private void limpiar() {
         txtCode.setText(null);
         txtName.setText(null);
         txtPrice.setText(null);
         txtAmount.setText(null);
     }
-    
+
     //Valida que la catidad sea un número
     public static boolean validarCantidad(String cantidad) {
         return cantidad.matches("^[0-9]+$");

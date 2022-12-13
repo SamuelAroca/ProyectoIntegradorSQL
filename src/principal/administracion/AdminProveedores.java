@@ -1,37 +1,17 @@
 package principal.administracion;
 
 import java.sql.*;
-import java.util.Objects;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import principal.logANDres.Conexion;
 
 public class AdminProveedores extends javax.swing.JPanel {
 
     public AdminProveedores() {
         initComponents();
-        txt_id_product.setEditable(false);
-
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        Conexion conn = new Conexion();
-        Connection con = conn.getConection();
-
-        try {
-            String sql = "SELECT id_producto from productos";
-
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-
-            cbxId_productos.addItem("ID Productos");
-
-            while (rs.next()) {
-                cbxId_productos.addItem(rs.getString("id_producto"));
-            }
-            rs.close();
-
-        } catch (SQLException ex) {
-            System.out.println("Error consulta: " + ex.getMessage());
-        }
+        txtTipoProducto.setEditable(false);
+        rellenarTablaProveedor();
     }
 
     @SuppressWarnings("unchecked")
@@ -43,14 +23,10 @@ public class AdminProveedores extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         lblCode = new javax.swing.JLabel();
         lblProduct = new javax.swing.JLabel();
-        lblPrice = new javax.swing.JLabel();
-        lblAmount = new javax.swing.JLabel();
         txtCode = new javax.swing.JTextField();
-        txt_id_product = new javax.swing.JTextField();
-        txtPrice = new javax.swing.JTextField();
-        txtAmount = new javax.swing.JTextField();
+        txtTipoProducto = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblProducts = new javax.swing.JTable();
+        tblProveedor = new javax.swing.JTable();
         btnAgregar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         lblName = new javax.swing.JLabel();
@@ -58,7 +34,7 @@ public class AdminProveedores extends javax.swing.JPanel {
         btnModificar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         txtBuscar = new javax.swing.JTextField();
-        cbxId_productos = new javax.swing.JComboBox<>();
+        cbxTipoProducto = new javax.swing.JComboBox<>();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -72,50 +48,26 @@ public class AdminProveedores extends javax.swing.JPanel {
         lblCode.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/BtnCo.png"))); // NOI18N
         jPanel2.add(lblCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
 
-        lblProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/lblNProducto_1.png"))); // NOI18N
-        jPanel2.add(lblProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, -1, -1));
-
-        lblPrice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/lblNProducto.png"))); // NOI18N
-        jPanel2.add(lblPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, -1, -1));
-
-        lblAmount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/BtnCa.png"))); // NOI18N
-        jPanel2.add(lblAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, -1, -1));
+        lblProduct.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/lbl_tipo_producto.png"))); // NOI18N
+        jPanel2.add(lblProduct, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, -1, -1));
         jPanel2.add(txtCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 60, 680, 50));
-        jPanel2.add(txt_id_product, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 200, 680, 50));
-        jPanel2.add(txtPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 270, 680, 50));
-        jPanel2.add(txtAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 340, 680, 50));
+        jPanel2.add(txtTipoProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 240, 680, 50));
 
-        tblProducts.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Código", "Nombre", "Producto", "Precio", "Cantidad"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, true, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tblProducts.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblProveedor.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblProductsMouseClicked(evt);
+                tblProveedorMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblProducts);
-        if (tblProducts.getColumnModel().getColumnCount() > 0) {
-            tblProducts.getColumnModel().getColumn(0).setResizable(false);
-            tblProducts.getColumnModel().getColumn(1).setResizable(false);
-            tblProducts.getColumnModel().getColumn(2).setResizable(false);
-            tblProducts.getColumnModel().getColumn(3).setResizable(false);
-            tblProducts.getColumnModel().getColumn(4).setResizable(false);
+        jScrollPane1.setViewportView(tblProveedor);
+        if (tblProveedor.getColumnModel().getColumnCount() > 0) {
+            tblProveedor.getColumnModel().getColumn(0).setResizable(false);
+            tblProveedor.getColumnModel().getColumn(1).setResizable(false);
+            tblProveedor.getColumnModel().getColumn(2).setResizable(false);
+            tblProveedor.getColumnModel().getColumn(3).setResizable(false);
+            tblProveedor.getColumnModel().getColumn(4).setResizable(false);
         }
 
-        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 850, 250));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 850, 340));
 
         btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/Agregar.png"))); // NOI18N
         btnAgregar.setBorder(null);
@@ -142,8 +94,8 @@ public class AdminProveedores extends javax.swing.JPanel {
         jPanel2.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 140, -1, -1));
 
         lblName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/BtnNo.png"))); // NOI18N
-        jPanel2.add(lblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
-        jPanel2.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 130, 680, 50));
+        jPanel2.add(lblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
+        jPanel2.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 680, 50));
 
         btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/BtnModificar.png"))); // NOI18N
         btnModificar.setBorder(null);
@@ -166,18 +118,19 @@ public class AdminProveedores extends javax.swing.JPanel {
                 btnBuscarActionPerformed(evt);
             }
         });
-        jPanel2.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 280, -1, -1));
+        jPanel2.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 300, -1, -1));
 
         txtBuscar.setToolTipText("Solo Codigo");
         txtBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        jPanel2.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 340, 120, 30));
+        jPanel2.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 360, 120, 30));
 
-        cbxId_productos.addItemListener(new java.awt.event.ItemListener() {
+        cbxTipoProducto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione", "Granola", "Cereal", "Avena", "Bebida", "Otro" }));
+        cbxTipoProducto.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbxId_productosItemStateChanged(evt);
+                cbxTipoProductoItemStateChanged(evt);
             }
         });
-        jPanel2.add(cbxId_productos, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 410, 130, 20));
+        jPanel2.add(cbxTipoProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 420, 120, 30));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1080, 690));
 
@@ -185,13 +138,40 @@ public class AdminProveedores extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     //Carga datos seleccionados en los Label
-    private void tblProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductsMouseClicked
+    private void tblProveedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProveedorMouseClicked
 
-    }//GEN-LAST:event_tblProductsMouseClicked
+    }//GEN-LAST:event_tblProveedorMouseClicked
 
     //Agrega los proveedores a la tabla y al archivo de texto
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        if (!txtCode.getText().isEmpty() && !txtName.getText().isEmpty() && !txtTipoProducto.getText().isEmpty()) {
+            if (validarCodigo(txtCode.getText()) && validarNombre(txtName.getText())) {
+                try {
+                    PreparedStatement ps = null;
 
+                    Conexion conn = new Conexion();
+                    Connection con = conn.getConection();
+
+                    ps = con.prepareStatement("INSERT INTO proveedor (id_proveedor, nombre_proveedor, tipo_producto) VALUES (?,?,?)");
+                    ps.setString(1, txtCode.getText());
+                    ps.setString(2, txtName.getText());
+                    ps.setString(3, txtTipoProducto.getText());
+                    ps.execute();
+
+                    JOptionPane.showMessageDialog(null, "Producto Guardado");
+                    cbxTipoProducto.setSelectedIndex(0);
+                    rellenarTablaProveedor();
+                    limpiar();
+
+                } catch (SQLException ex) {
+                    System.out.println("Error al agregar: " + ex);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Por favor digite bien los datos");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor rellene todos los espacios");
+        }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     //Elimina del Archivo y tabla
@@ -208,13 +188,13 @@ public class AdminProveedores extends javax.swing.JPanel {
         //rellenarTablaProducto();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void cbxId_productosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxId_productosItemStateChanged
-        if (Objects.equals(cbxId_productos.getSelectedItem(), "ID Productos")) {
-            txt_id_product.setText("");
+    private void cbxTipoProductoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxTipoProductoItemStateChanged
+        if (Objects.equals(cbxTipoProducto.getSelectedItem(), "Seleccione")) {
+            txtTipoProducto.setText("");
         } else {
-            txt_id_product.setText((String) cbxId_productos.getSelectedItem());
+            txtTipoProducto.setText((String) cbxTipoProducto.getSelectedItem());
         }
-    }//GEN-LAST:event_cbxId_productosItemStateChanged
+    }//GEN-LAST:event_cbxTipoProductoItemStateChanged
 
     //Metodo para actualizar la tabla
     private void actualizarTabla() {
@@ -228,52 +208,84 @@ public class AdminProveedores extends javax.swing.JPanel {
 
     //Limpia los Label
     //Escribe en la base de datos
-    private void escribiArchivo() {
+    private void rellenarTablaProveedor() {
+        String campo = txtBuscar.getText();
+        String where = "";
+        if (!"".equals(campo)) {
+            where = "WHERE id_proveedor = '" + campo + "'";
+        }
 
+        try {
+            DefaultTableModel modelo = new DefaultTableModel();
+            tblProveedor.setModel(modelo);
+
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConection();
+
+            String sql = "SELECT id_proveedor, nombre_proveedor, tipo_producto FROM proveedor " + where;
+            System.out.println(sql);
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsMd = (ResultSetMetaData) rs.getMetaData();
+            int cantidadColumnas = rsMd.getColumnCount();
+
+            modelo.addColumn("Código");
+            modelo.addColumn("Nombre");
+            modelo.addColumn("Tipo de Producto");
+
+            int[] anchos = {50, 50, 50};
+            for (int i = 0; i < tblProveedor.getColumnCount(); i++) {
+                tblProveedor.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+            }
+
+            while (rs.next()) {
+
+                Object[] filas = new Object[cantidadColumnas];
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i + 1);
+                }
+                modelo.addRow(filas);
+            }
+
+        } catch (SQLException ex) {
+            System.err.println(ex.toString());
+        }
     }
 
     public void limpiar() {
         txtCode.setText(null);
         txtName.setText(null);
-        txt_id_product.setText(null);
-        txtPrice.setText(null);
-        txtAmount.setText(null);
+        txtTipoProducto.setText(null);
     }
 
     //Verifican que el usuario no digite mal un dato
+    public static boolean validarCodigo(String codigo) {
+        return codigo.matches("^[A-Za-z0-9]+[-]{1}[6]{1}");
+    }
+
     public static boolean validarNombre(String nombre) {
-        return nombre.matches("^([A-Z]{1}[a-z0-9A-ZñÑ]+)$");
+        return nombre.matches("^([A-ZÁ-Ú]{1}[a-z0-9A-ZñÑá-ú ]+)$");
     }
-
-    public static boolean validarPrecio(String precio) {
-        return precio.matches("^[0-9]{3}[0-9]+$");
-    }
-
-    public static boolean validarCantidad(String cantidad) {
-        return cantidad.matches("^[0-9]+$");
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnModificar;
-    private javax.swing.JComboBox<String> cbxId_productos;
+    private javax.swing.JComboBox<String> cbxTipoProducto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblAmount;
     private javax.swing.JLabel lblCode;
     private javax.swing.JLabel lblName;
-    private javax.swing.JLabel lblPrice;
     private javax.swing.JLabel lblProduct;
-    private javax.swing.JTable tblProducts;
-    private javax.swing.JTextField txtAmount;
+    private javax.swing.JTable tblProveedor;
     private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txtCode;
     private javax.swing.JTextField txtName;
-    private javax.swing.JTextField txtPrice;
-    private javax.swing.JTextField txt_id_product;
+    private javax.swing.JTextField txtTipoProducto;
     // End of variables declaration//GEN-END:variables
 }

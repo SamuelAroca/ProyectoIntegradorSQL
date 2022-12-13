@@ -7,11 +7,14 @@ import javax.swing.table.*;
 import principal.logANDres.*;
 
 public class AdminProductsR extends javax.swing.JPanel {
-    
+
     public AdminProductsR() {
         initComponents();
+        comboProveedor();
         rellenarTablaProducto();
+        txtProveedor.setEditable(false);
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -25,14 +28,17 @@ public class AdminProductsR extends javax.swing.JPanel {
         txtCode = new javax.swing.JTextField();
         txtName = new javax.swing.JTextField();
         txtPrice = new javax.swing.JTextField();
-        txtAmount = new javax.swing.JTextField();
+        txtProveedor = new javax.swing.JTextField();
         btnAgregar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProducts = new javax.swing.JTable();
+        cbxProveedor = new javax.swing.JComboBox<>();
         comboTipo = new javax.swing.JComboBox<>();
         btnBuscar = new javax.swing.JButton();
         txtBuscar = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        txtAmount = new javax.swing.JTextField();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -42,26 +48,26 @@ public class AdminProductsR extends javax.swing.JPanel {
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1080, -1));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/BtnCo.png"))); // NOI18N
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/BtnNo.png"))); // NOI18N
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, -1, -1));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/BtnPr.png"))); // NOI18N
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, -1, -1));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 270, -1, -1));
 
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/BtnCa.png"))); // NOI18N
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, -1, -1));
-        jPanel1.add(txtCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 140, 680, 50));
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/proveedorBTN.png"))); // NOI18N
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, -1, -1));
+        jPanel1.add(txtCode, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 130, 680, 50));
 
         txtName.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtNameFocusLost(evt);
             }
         });
-        jPanel1.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 220, 680, 50));
-        jPanel1.add(txtPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 300, 680, 50));
-        jPanel1.add(txtAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 380, 680, 50));
+        jPanel1.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 200, 680, 50));
+        jPanel1.add(txtPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 270, 680, 50));
+        jPanel1.add(txtProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 410, 680, 50));
 
         btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/Agregar.png"))); // NOI18N
         btnAgregar.setToolTipText("");
@@ -72,42 +78,26 @@ public class AdminProductsR extends javax.swing.JPanel {
                 btnAgregarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 370, 120, 50));
+        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 360, 120, 50));
 
-        tblProducts.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Código", "Nombre", "Precio", "Cantidad"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Double.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
         jScrollPane1.setViewportView(tblProducts);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 450, 850, 300));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, 850, 270));
 
-        comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Granolas", "Cereales", "Avenas", "Bebidas", "Otros" }));
+        cbxProveedor.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbxProveedorItemStateChanged(evt);
+            }
+        });
+        jPanel1.add(cbxProveedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 590, 140, 30));
+
+        comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "1. Granolas", "2. Cereales", "3. Avenas", "4. Bebidas", "5. Otros" }));
         comboTipo.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 comboTipoItemStateChanged(evt);
             }
         });
-        jPanel1.add(comboTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 550, 140, 30));
+        jPanel1.add(comboTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 540, 140, 30));
 
         btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/Buscar.png"))); // NOI18N
         btnBuscar.setBorder(null);
@@ -118,62 +108,65 @@ public class AdminProductsR extends javax.swing.JPanel {
                 btnBuscarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 430, -1, -1));
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 420, -1, -1));
 
         txtBuscar.setToolTipText("Solo Codigo");
         txtBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 490, 120, 30));
+        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 480, 120, 30));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/admins/Productos.png"))); // NOI18N
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 140, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 130, -1, -1));
+
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/BtnCa.png"))); // NOI18N
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, -1, -1));
+        jPanel1.add(txtAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 340, 680, 50));
 
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1073, 767));
     }// </editor-fold>//GEN-END:initComponents
 
     //Agrega los productos a la tabla y al archivo de texto
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        PreparedStatement ps = null;
-        if (!txtCode.getText().isEmpty() && !txtName.getText().isEmpty() && !txtPrice.getText().isEmpty() && !txtAmount.getText().isEmpty()) {
+        if (!txtCode.getText().isEmpty() && !txtName.getText().isEmpty() && !txtPrice.getText().isEmpty() && !txtProveedor.getText().isEmpty() && !txtProveedor.getText().isEmpty()) {
             if (validarCodigo(txtCode.getText()) && validarNombre(txtName.getText()) && validarPrecio(txtPrice.getText()) && validarCantidad(txtAmount.getText())) {
                 try {
+                    PreparedStatement ps = null;
+
                     Conexion objCon = new Conexion();
                     Connection conn = objCon.getConection();
-                    ps = conn.prepareStatement("INSERT INTO productos (id_producto, nombre, precio, cantidad) VALUES (?,?,?,?)");
+
+                    ps = conn.prepareStatement("INSERT INTO productos (id_producto, nombre, precio, cantidad, id_proveedor) VALUES (?,?,?,?,?)");
                     ps.setString(1, txtCode.getText());
                     ps.setString(2, txtName.getText());
                     ps.setString(3, txtPrice.getText());
                     ps.setString(4, txtAmount.getText());
+                    ps.setString(5, txtProveedor.getText());
 
                     ps.execute();
 
                     JOptionPane.showMessageDialog(null, "Producto Guardado");
 
-                    if(Objects.equals(comboTipo.getSelectedItem(), "Todos")) {
+                    if (Objects.equals(comboTipo.getSelectedItem(), "Todos")) {
                         rellenarTablaProducto();
-                    }
-                    else if(Objects.equals(comboTipo.getSelectedItem(), "Granolas")) {
+                    } else if (Objects.equals(comboTipo.getSelectedItem(), "1. Granolas")) {
                         rellenarTabla("1");
-                    }
-                    else if(Objects.equals(comboTipo.getSelectedItem(), "Cereales")) {
+                    } else if (Objects.equals(comboTipo.getSelectedItem(), "2. Cereales")) {
                         rellenarTabla("2");
-                    }
-                    else if(Objects.equals(comboTipo.getSelectedItem(), "Avenas")) {
-                       rellenarTabla("3"); 
-                    }
-                    else if(Objects.equals(comboTipo.getSelectedItem(), "Bebidas")) {
+                    } else if (Objects.equals(comboTipo.getSelectedItem(), "3. Avenas")) {
+                        rellenarTabla("3");
+                    } else if (Objects.equals(comboTipo.getSelectedItem(), "4. Bebidas")) {
                         rellenarTabla("4");
-                    }
-                    else if(Objects.equals(comboTipo.getSelectedItem(), "Otros")) {
+                    } else if (Objects.equals(comboTipo.getSelectedItem(), "5. Otros")) {
                         rellenarTabla("5");
                     }
                     limpiar();
+                    cbxProveedor.setSelectedIndex(0);
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Error al Guardar Producto");
                     System.out.println(ex);
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Por favor digite bien los datos");
-            }    
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Por favor rellene todos los espacios");
         }
@@ -183,23 +176,18 @@ public class AdminProductsR extends javax.swing.JPanel {
     private void comboTipoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboTipoItemStateChanged
 
         //Opciones del comboBox
-        if(Objects.equals(comboTipo.getSelectedItem(), "Todos")) {
+        if (Objects.equals(comboTipo.getSelectedItem(), "Todos")) {
             rellenarTablaProducto();
             txtBuscar.setText(null);
-        }
-        else if(Objects.equals(comboTipo.getSelectedItem(), "Granolas")) {
+        } else if (Objects.equals(comboTipo.getSelectedItem(), "1. Granolas")) {
             rellenarTabla("1");
-        }
-        else if(Objects.equals(comboTipo.getSelectedItem(), "Cereales")) {
+        } else if (Objects.equals(comboTipo.getSelectedItem(), "2. Cereales")) {
             rellenarTabla("2");
-        }
-        else if(Objects.equals(comboTipo.getSelectedItem(), "Avenas")) {
-           rellenarTabla("3"); 
-        }
-        else if(Objects.equals(comboTipo.getSelectedItem(), "Bebidas")) {
+        } else if (Objects.equals(comboTipo.getSelectedItem(), "3. Avenas")) {
+            rellenarTabla("3");
+        } else if (Objects.equals(comboTipo.getSelectedItem(), "4. Bebidas")) {
             rellenarTabla("4");
-        }
-        else if(Objects.equals(comboTipo.getSelectedItem(), "Otros")) {
+        } else if (Objects.equals(comboTipo.getSelectedItem(), "5. Otros")) {
             rellenarTabla("5");
         }
     }//GEN-LAST:event_comboTipoItemStateChanged
@@ -214,40 +202,49 @@ public class AdminProductsR extends javax.swing.JPanel {
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         rellenarTablaProducto();
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void cbxProveedorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxProveedorItemStateChanged
+        if (Objects.equals(cbxProveedor.getSelectedItem(), "ID Proveedor")) {
+            txtProveedor.setText("");
+        } else {
+            txtProveedor.setText((String) cbxProveedor.getSelectedItem());
+        }
+    }//GEN-LAST:event_cbxProveedorItemStateChanged
     //"SELECT codigo, nombre, precio, cantidad from productos where codigo LIKE '%" + tabla + "'"
     //Escribe los datos en el txt
-    private void rellenarTabla(String tabla){
+    private void rellenarTabla(String tabla) {
         try {
             DefaultTableModel modelo = new DefaultTableModel();
             tblProducts.setModel(modelo);
             PreparedStatement ps = null;
             ResultSet rs = null;
-            
+
             Conexion objCon = new Conexion();
             Connection conn = objCon.getConection();
-            
-            String sql = "SELECT id_producto, nombre, precio, cantidad from productos where id_producto LIKE '%" + tabla + "'";
+
+            String sql = "SELECT pro.id_producto, pro.nombre, pro.precio, pro.cantidad, prov.nombre_proveedor from productos as pro inner join proveedor as prov on pro.id_proveedor = prov.id_proveedor where id_producto LIKE '%" + tabla + "'";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
-            
+
             ResultSetMetaData rsMd = rs.getMetaData();
             int cantidadColumnas = rsMd.getColumnCount();
-            
+
             modelo.addColumn("Codigo");
             modelo.addColumn("Nombre");
             modelo.addColumn("Precio");
             modelo.addColumn("Cantidad");
-            
-            int[] anchos = {50,200,50,50}; 
+            modelo.addColumn("Nombre Proveedor");
+
+            int[] anchos = {50, 50, 50, 50, 50};
             
             for (int x = 0; x < cantidadColumnas; x++) {
                 tblProducts.getColumnModel().getColumn(x).setPreferredWidth(anchos[x]);
             }
-            
+
             while (rs.next()) {
-                
+
                 Object[] filas = new Object[cantidadColumnas];
-                
+
                 for (int i = 0; i < cantidadColumnas; i++) {
                     filas[i] = rs.getObject(i + 1);
                 }
@@ -257,7 +254,8 @@ public class AdminProductsR extends javax.swing.JPanel {
             System.err.println(ex.toString());
         }
     }
-    private void rellenarTablaProducto(){
+
+    private void rellenarTablaProducto() {
         String campo = txtBuscar.getText();
         String where = "";
         if (!"".equals(campo)) {
@@ -273,7 +271,7 @@ public class AdminProductsR extends javax.swing.JPanel {
             Conexion conn = new Conexion();
             Connection con = conn.getConection();
 
-            String sql = "SELECT id_producto, nombre, precio, cantidad FROM productos " + where;
+            String sql = "SELECT pro.id_producto, pro.nombre, pro.precio, pro.cantidad, prov.nombre_proveedor from productos as pro inner join proveedor as prov on pro.id_proveedor = prov.id_proveedor " + where;
             System.out.println(sql);
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -285,7 +283,10 @@ public class AdminProductsR extends javax.swing.JPanel {
             modelo.addColumn("Producto");
             modelo.addColumn("Precio");
             modelo.addColumn("Cantidad");
-            int[] anchos = {50, 200, 50, 50};
+            modelo.addColumn("Nombre Proveedor");
+
+            int[] anchos = {50, 50, 50, 50, 50};
+
             for (int i = 0; i < tblProducts.getColumnCount(); i++) {
                 tblProducts.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
             }
@@ -302,34 +303,64 @@ public class AdminProductsR extends javax.swing.JPanel {
             System.err.println(ex.toString());
         }
     }
+
+    private void comboProveedor() {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        Conexion conn = new Conexion();
+        Connection con = conn.getConection();
+
+        try {
+            String sql = "SELECT id_proveedor FROM proveedor";
+
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            cbxProveedor.addItem("ID Proveedor");
+
+            while (rs.next()) {
+                cbxProveedor.addItem(rs.getString("id_proveedor"));
+            }
+            rs.close();
+
+        } catch (SQLException ex) {
+            System.out.println("Error consulta: " + ex.getMessage());
+        }
+    }
+
     //Limpia los Label de datos
-    private void limpiar(){
+    private void limpiar() {
         txtCode.setText("");
         txtName.setText("");
         txtPrice.setText("");
         txtAmount.setText("");
+        txtProveedor.setText("");
     }
-    
+
     //Verifican que el usuario no digite mal un dato
     public static boolean validarCodigo(String codigo) {
         return codigo.matches("^[A-Za-z0-9]+[-]{1}[1-5]{1}");
     }
+
     public static boolean validarNombre(String nombre) {
         return nombre.matches("^([A-ZÁ-Ú]{1}[a-z0-9A-ZñÑá-ú ]+)$");
     }
-    
+
     public static boolean validarPrecio(String precio) {
         return precio.matches("^[0-9]{3}[0-9]+$");
     }
-    
+
     public static boolean validarCantidad(String cantidad) {
         return cantidad.matches("^[0-9]+$");
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JComboBox<String> cbxProveedor;
     private javax.swing.JComboBox<String> comboTipo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -343,5 +374,6 @@ public class AdminProductsR extends javax.swing.JPanel {
     private javax.swing.JTextField txtCode;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtPrice;
+    private javax.swing.JTextField txtProveedor;
     // End of variables declaration//GEN-END:variables
 }
