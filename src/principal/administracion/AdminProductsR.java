@@ -204,10 +204,14 @@ public class AdminProductsR extends javax.swing.JPanel {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void cbxProveedorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxProveedorItemStateChanged
-        if (Objects.equals(cbxProveedor.getSelectedItem(), "ID Proveedor")) {
+        if (Objects.equals(cbxProveedor.getSelectedItem(), "Proveedor")) {
             txtProveedor.setText("");
         } else {
-            txtProveedor.setText((String) cbxProveedor.getSelectedItem());
+            String idProveedor = (String) cbxProveedor.getSelectedItem();
+            String[] idProveedorSplit;
+            idProveedorSplit = idProveedor.split(" \\| ");
+
+            txtProveedor.setText(idProveedorSplit[0]);
         }
     }//GEN-LAST:event_cbxProveedorItemStateChanged
     //"SELECT codigo, nombre, precio, cantidad from productos where codigo LIKE '%" + tabla + "'"
@@ -222,7 +226,7 @@ public class AdminProductsR extends javax.swing.JPanel {
             Conexion objCon = new Conexion();
             Connection conn = objCon.getConection();
 
-            String sql = "SELECT pro.id_producto, pro.nombre, pro.precio, pro.cantidad, prov.nombre_proveedor from productos as pro inner join proveedor as prov on pro.id_proveedor = prov.id_proveedor where id_producto LIKE '%" + tabla + "'";
+            String sql = "SELECT pro.id_producto, pro.nombre, pro.precio, pro.cantidad, concat(prov.id_proveedor, ' | ', prov.nombre_proveedor, ' | ', prov.tipo_producto) as proveedor from proveedor as prov inner join productos as pro on prov.id_proveedor = pro.id_proveedor where id_producto LIKE '%" + tabla + "'";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
 
@@ -236,7 +240,7 @@ public class AdminProductsR extends javax.swing.JPanel {
             modelo.addColumn("Nombre Proveedor");
 
             int[] anchos = {50, 50, 50, 50, 50};
-            
+
             for (int x = 0; x < cantidadColumnas; x++) {
                 tblProducts.getColumnModel().getColumn(x).setPreferredWidth(anchos[x]);
             }
@@ -271,7 +275,7 @@ public class AdminProductsR extends javax.swing.JPanel {
             Conexion conn = new Conexion();
             Connection con = conn.getConection();
 
-            String sql = "SELECT pro.id_producto, pro.nombre, pro.precio, pro.cantidad, prov.nombre_proveedor from productos as pro inner join proveedor as prov on pro.id_proveedor = prov.id_proveedor " + where;
+            String sql = "SELECT pro.id_producto, pro.nombre, pro.precio, pro.cantidad, concat(prov.id_proveedor, ' | ', prov.nombre_proveedor, ' | ', prov.tipo_producto) as proveedor from proveedor as prov inner join productos as pro on prov.id_proveedor = pro.id_proveedor " + where;
             System.out.println(sql);
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -283,7 +287,7 @@ public class AdminProductsR extends javax.swing.JPanel {
             modelo.addColumn("Producto");
             modelo.addColumn("Precio");
             modelo.addColumn("Cantidad");
-            modelo.addColumn("Nombre Proveedor");
+            modelo.addColumn("Proveedor");
 
             int[] anchos = {50, 50, 50, 50, 50};
 
@@ -312,15 +316,18 @@ public class AdminProductsR extends javax.swing.JPanel {
         Connection con = conn.getConection();
 
         try {
-            String sql = "SELECT id_proveedor FROM proveedor";
+            String sql = "SELECT id_proveedor, nombre_proveedor, tipo_producto FROM proveedor";
 
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
-            cbxProveedor.addItem("ID Proveedor");
+            cbxProveedor.addItem("Proveedor");
 
             while (rs.next()) {
-                cbxProveedor.addItem(rs.getString("id_proveedor"));
+                String idProveedor = rs.getString("id_proveedor");
+                String nombreProveedor = rs.getString("nombre_proveedor");
+                String tipoProducto = rs.getString("tipo_producto");
+                cbxProveedor.addItem(idProveedor + " | " + nombreProveedor + " | " + tipoProducto);
             }
             rs.close();
 
