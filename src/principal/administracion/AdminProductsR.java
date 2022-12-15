@@ -200,7 +200,13 @@ public class AdminProductsR extends javax.swing.JPanel {
     }//GEN-LAST:event_txtNameFocusLost
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        rellenarTablaProducto();
+        String campo = txtBuscar.getText();
+        if ("".equals(campo)) {
+            comboTipo.setSelectedIndex(0);
+            rellenarTablaProducto();
+        } else {
+            rellenarTablaProducto();
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void cbxProveedorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxProveedorItemStateChanged

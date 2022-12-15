@@ -92,7 +92,6 @@ public class Login extends javax.swing.JFrame {
 
         btnLogin.setForeground(new java.awt.Color(255, 255, 255));
         btnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/logANDres/sesion.png"))); // NOI18N
-        btnLogin.setBorder(null);
         btnLogin.setBorderPainted(false);
         btnLogin.setContentAreaFilled(false);
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
@@ -100,7 +99,7 @@ public class Login extends javax.swing.JFrame {
                 btnLoginActionPerformed(evt);
             }
         });
-        jPanel2.add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 650, 250, 70));
+        jPanel2.add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 660, 220, -1));
 
         lblTitle1.setForeground(new java.awt.Color(163, 156, 156));
         lblTitle1.setText("Ingresa tus credenciales");
