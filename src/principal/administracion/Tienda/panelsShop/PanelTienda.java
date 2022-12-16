@@ -1,27 +1,24 @@
 package principal.administracion.Tienda.panelsShop;
 
-import java.io.*;
+import java.sql.*;
 import java.util.*;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import principal.administracion.AdminProductsEC;
-import principal.administracion.AdminProductsR;
+import principal.logANDres.Conexion;
 
 public class PanelTienda extends javax.swing.JPanel {
 
-    DefaultTableModel dtm;
-    Object[] o = new Object[4];
-
     public PanelTienda() {
         initComponents();
-
+        listaCarrito();
         //Cargamos la tabla granolas y evitamos que el usuario pueda modificar datos ya definidos
-        dtm = (DefaultTableModel) tblProducts.getModel();
-        cargarDatos("granolas.txt");
+        rellenarTablaProducto();
         txtPrice.setEditable(false);
         txtCode.setEditable(false);
         txtName.setEditable(false);
+        tAreaCarrito.setEditable(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -42,6 +39,14 @@ public class PanelTienda extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProducts = new javax.swing.JTable();
         comboTipo = new javax.swing.JComboBox<>();
+        btnBuscar = new javax.swing.JButton();
+        txtBuscar = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tAreaCarrito = new javax.swing.JTextArea();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -73,7 +78,7 @@ public class PanelTienda extends javax.swing.JPanel {
                 btnAgregarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 190, 130, 50));
+        jPanel1.add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 190, 120, 50));
 
         tblProducts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -100,13 +105,45 @@ public class PanelTienda extends javax.swing.JPanel {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 450, 850, 300));
 
-        comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Granolas", "Cereales", "Avenas", "Bebidas", "Otros" }));
+        comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "1. Granolas", "2. Cereales", "3. Avenas", "4. Bebidas", "5. Otros" }));
         comboTipo.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 comboTipoItemStateChanged(evt);
             }
         });
-        jPanel1.add(comboTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 290, 130, 30));
+        jPanel1.add(comboTipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 250, 130, 30));
+
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/Buscar.png"))); // NOI18N
+        btnBuscar.setBorder(null);
+        btnBuscar.setBorderPainted(false);
+        btnBuscar.setContentAreaFilled(false);
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 320, -1, -1));
+
+        txtBuscar.setToolTipText("Solo Codigo");
+        txtBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 380, 120, 30));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/dolar-de-saco.png"))); // NOI18N
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 520, -1, -1));
+
+        tAreaCarrito.setLineWrap(true);
+        jScrollPane2.setViewportView(tAreaCarrito);
+
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 540, 170, 210));
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/bolsas-de-compras.png"))); // NOI18N
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 520, -1, -1));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/hastag.png"))); // NOI18N
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 520, -1, -1));
+
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/shopping-bag-anadir.png"))); // NOI18N
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 520, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -132,94 +169,233 @@ public class PanelTienda extends javax.swing.JPanel {
 
     //Guarda los productos seleccionados en el carrito
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        if (validarCantidad(txtAmount.getText())) {
-            File file = new File("carrito.txt");
-            String codigo;
-            String nombre;
-            String precio;
-            String cantidad;
+        try {                                           
+            Conexion conn = new Conexion();
+            Connection con = conn.getConection();
+            
+            PreparedStatement ps2 = null;
+            ResultSet rs = null;
+            
+            String sql = "SELECT id_producto FROM carrito where id_producto = ?";
+            ps2 = con.prepareStatement(sql);
+            ps2.setString(1, txtCode.getText());
+            rs = ps2.executeQuery();
+            
+            if (rs.next()) {
+                JOptionPane.showMessageDialog(null, "          No repita productos \nEditar la cantidad desde el carrito");
+                limpiar();
+            } else {
+                try {
+                    String cantidad = txtAmount.getText();
+                    int numero = 0;
+                    numero = Integer.parseInt(cantidad);
+                    System.out.println(numero);
+                    if (validarCantidad(txtAmount.getText()) && !txtAmount.getText().isEmpty() && existencia(numero)) {
+                        PreparedStatement ps = null;
 
-            try {
-                FileWriter fw = new FileWriter(file, true);
-                BufferedWriter bw = new BufferedWriter(fw);
+                        ps = con.prepareStatement("INSERT INTO carrito (id_producto, nombre, precio, cantidad) VALUES (?,?,?,?)");
+                        ps.setString(1, txtCode.getText());
+                        ps.setString(2, txtName.getText());
+                        ps.setString(3, txtPrice.getText());
+                        ps.setString(4, txtAmount.getText());
 
-                codigo = txtCode.getText();
-                nombre = txtName.getText();
-                precio = txtPrice.getText();
-                cantidad = txtAmount.getText();
-
-                if (!txtCode.getText().isEmpty() && !txtName.getText().isEmpty() && !txtPrice.getText().isEmpty() && !txtAmount.getText().isEmpty()) {
-                    bw.write(codigo + " " + nombre + " " + precio + " " + cantidad);
-                    bw.newLine();
-
-                    JOptionPane.showMessageDialog(null, "¡¡¡Producto agregado al carrito Satisfactoriamente!!!");
-                    limpiar();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Porfavor ponga la cantidad a comprar", "WARNING_MESSAGE", JOptionPane.WARNING_MESSAGE);
+                        if (!ps.execute()) {
+                            JOptionPane.showMessageDialog(null, "Producto Guardado");
+                            tAreaCarrito.setText(null);
+                            comboTipo.setSelectedIndex(0);
+                            listaCarrito();
+                            rellenarTablaProducto();
+                            limpiar();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Algo anda mal");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "validar cantidad");
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "          No repita productos \nEditar la cantidad desde el carrito");
+                    System.out.println(ex);
+                } catch (NumberFormatException ex) {
+                    System.out.println(ex);
                 }
-                bw.close();
-                fw.close();
-            } catch (IOException ex) {
-                Logger.getLogger(AdminProductsEC.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Digite la cantidad en números", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        } catch (SQLException ex) {
+            Logger.getLogger(PanelTienda.class.getName()).log(Level.SEVERE,null, ex);
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     //Carga el producto seleccionado en los Label excepto la cantidad
     private void tblProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductsMouseClicked
-        int seleccionar = tblProducts.rowAtPoint(evt.getPoint());
-        txtCode.setText(String.valueOf(tblProducts.getValueAt(seleccionar, 0)));
-        txtName.setText(String.valueOf(tblProducts.getValueAt(seleccionar, 1)));
-        txtPrice.setText(String.valueOf(tblProducts.getValueAt(seleccionar, 2)));
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            Conexion objCon = new Conexion();
+            Connection conn = objCon.getConection();
+
+            int fila = tblProducts.getSelectedRow();
+            String codigo = tblProducts.getValueAt(fila, 0).toString();
+            System.out.println(fila);
+            System.out.println(codigo);
+
+            ps = conn.prepareStatement("SELECT id_producto, nombre, precio, cantidad FROM productos WHERE id_producto=?");
+            ps.setString(1, codigo);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                txtCode.setText(rs.getString("id_producto"));
+                txtName.setText(rs.getString("nombre"));
+                txtPrice.setText(rs.getString("precio"));
+                txtAmount.setText(rs.getString("cantidad"));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+        }
     }//GEN-LAST:event_tblProductsMouseClicked
 
     //Cambia el contenido de la tabla
     private void comboTipoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboTipoItemStateChanged
-        dtm.getDataVector().removeAllElements();
-        tblProducts.updateUI();
-
-        if (Objects.equals(comboTipo.getSelectedItem(), "Granolas")) {
-            dtm = (DefaultTableModel) tblProducts.getModel();
-            cargarDatos("granolas.txt");
+        if (Objects.equals(comboTipo.getSelectedItem(), "Todos")) {
+            rellenarTablaProducto();
+            txtBuscar.setText(null);
+        } else if (Objects.equals(comboTipo.getSelectedItem(), "1. Granolas")) {
+            rellenarTabla("1");
+        } else if (Objects.equals(comboTipo.getSelectedItem(), "2. Cereales")) {
+            rellenarTabla("2");
+        } else if (Objects.equals(comboTipo.getSelectedItem(), "3. Avenas")) {
+            rellenarTabla("3");
+        } else if (Objects.equals(comboTipo.getSelectedItem(), "4. Bebidas")) {
+            rellenarTabla("4");
+        } else if (Objects.equals(comboTipo.getSelectedItem(), "5. Otros")) {
+            rellenarTabla("5");
         }
-        if (Objects.equals(comboTipo.getSelectedItem(), "Cereales")) {
-            dtm = (DefaultTableModel) tblProducts.getModel();
-            cargarDatos("cereales.txt");
-        }
-        if (Objects.equals(comboTipo.getSelectedItem(), "Avenas")) {
-            dtm = (DefaultTableModel) tblProducts.getModel();
-            cargarDatos("avenas.txt");
-        }
-        if (Objects.equals(comboTipo.getSelectedItem(), "Bebidas")) {
-            dtm = (DefaultTableModel) tblProducts.getModel();
-            cargarDatos("bebidas.txt");
-        }
-        if (Objects.equals(comboTipo.getSelectedItem(), "Otros")) {
-            dtm = (DefaultTableModel) tblProducts.getModel();
-            cargarDatos("otros.txt");
-        }
-        limpiar();
     }//GEN-LAST:event_comboTipoItemStateChanged
 
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        String campo = txtBuscar.getText();
+        if ("".equals(campo)) {
+            comboTipo.setSelectedIndex(0);
+            rellenarTablaProducto();
+        } else {
+            rellenarTablaProducto();
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+    private void rellenarTabla(String tabla) {
+        try {
+            DefaultTableModel modelo = new DefaultTableModel();
+            tblProducts.setModel(modelo);
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+
+            Conexion objCon = new Conexion();
+            Connection conn = objCon.getConection();
+
+            String sql = "SELECT id_producto, nombre, precio, cantidad FROM productos where id_producto LIKE '%" + tabla + "'";
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsMd = rs.getMetaData();
+            int cantidadColumnas = rsMd.getColumnCount();
+
+            modelo.addColumn("Codigo");
+            modelo.addColumn("Nombre");
+            modelo.addColumn("Precio");
+            modelo.addColumn("Cantidad");
+
+            int[] anchos = {50, 200, 50, 50};
+
+            for (int x = 0; x < cantidadColumnas; x++) {
+                tblProducts.getColumnModel().getColumn(x).setPreferredWidth(anchos[x]);
+            }
+
+            while (rs.next()) {
+
+                Object[] filas = new Object[cantidadColumnas];
+
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i + 1);
+                }
+                modelo.addRow(filas);
+            }
+        } catch (SQLException ex) {
+            System.err.println(ex.toString());
+        }
+    }
+
     //Carga los datos de la tabla
-    private void cargarDatos(String filePath) {
-        File file = new File(filePath);
+    private void rellenarTablaProducto() {
+        String campo = txtBuscar.getText();
+        String where = "";
+        if (!"".equals(campo)) {
+            where = "WHERE id_producto = '" + campo + "'";
+        }
 
         try {
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
+            DefaultTableModel modelo = new DefaultTableModel();
+            tblProducts.setModel(modelo);
 
-            DefaultTableModel model = (DefaultTableModel) tblProducts.getModel();
-            Object[] lines = br.lines().toArray();
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConection();
 
-            for (Object line : lines) {
-                String[] row = line.toString().split(" ");
-                model.addRow(row);
+            String sql = "SELECT id_producto, nombre, precio, cantidad FROM productos " + where;
+            System.out.println(sql);
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsMd = (ResultSetMetaData) rs.getMetaData();
+            int cantidadColumnas = rsMd.getColumnCount();
+
+            modelo.addColumn("Código");
+            modelo.addColumn("Producto");
+            modelo.addColumn("Precio");
+            modelo.addColumn("Cantidad");
+
+            int[] anchos = {50, 200, 50, 50};
+
+            for (int i = 0; i < tblProducts.getColumnCount(); i++) {
+                tblProducts.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
             }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(AdminProductsR.class.getName()).log(Level.SEVERE, null, ex);
+
+            while (rs.next()) {
+                Object[] filas = new Object[cantidadColumnas];
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i + 1);
+                }
+                modelo.addRow(filas);
+            }
+
+        } catch (SQLException ex) {
+            System.err.println(ex.toString());
+        }
+    }
+
+    private void listaCarrito() {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        Conexion conn = new Conexion();
+        Connection con = conn.getConection();
+
+        try {
+
+            String sql = "SELECT id, id_producto, nombre, precio, cantidad FROM carrito";
+
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String id = rs.getString(1);
+                String codigo = rs.getString(2);
+                String nombre = rs.getString(3);
+                String precio = rs.getString(4);
+                String cantidad = rs.getString(5);
+
+                String listaTexto = id + " | " + codigo + " | " + nombre + " | " + precio + " | " + cantidad + "\n";
+                tAreaCarrito.append(listaTexto);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error consulta: " + e.getMessage());
         }
     }
 
@@ -231,6 +407,54 @@ public class PanelTienda extends javax.swing.JPanel {
         txtAmount.setText(null);
     }
 
+    public boolean existencia(int cantidad) {
+        try {
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+
+            Conexion objCon = new Conexion();
+            Connection conn = objCon.getConection();
+
+            int fila = tblProducts.getSelectedRow();
+            int cantidadDB = (int) tblProducts.getValueAt(fila, 3);
+
+            ps = conn.prepareStatement("SELECT cantidad FROM productos WHERE cantidad = ?");
+            ps.setInt(1, cantidadDB);
+            System.out.println(ps);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int cantidadRecibida = rs.getInt(1);
+                if (cantidad <= cantidadRecibida) {
+                    try {
+                        PreparedStatement ps2 = null;
+                        int resta = cantidadRecibida - cantidad;
+                        System.out.println("Resta: " + resta);
+                        ps2 = conn.prepareStatement("UPDATE productos set cantidad = ? where cantidad = ?");
+                        ps2.setInt(1, resta);
+                        ps2.setInt(2, cantidadDB);
+                        System.out.println(ps2);
+
+                        int res = ps2.executeUpdate();
+
+                        if (res > 0) {
+                            System.out.println("Cantidad Actualizada");
+
+                            return true;
+                        }
+                    } catch (SQLException ex) {
+                        System.out.println("Error update: " + ex);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Exede la cantidad existente");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error primera consulta: " + e);
+        }
+        return false;
+    }
+
     //Valida que la catidad sea un número
     public static boolean validarCantidad(String cantidad) {
         return cantidad.matches("^[0-9]+$");
@@ -238,16 +462,24 @@ public class PanelTienda extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JComboBox<String> comboTipo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea tAreaCarrito;
     private javax.swing.JTable tblProducts;
     private javax.swing.JTextField txtAmount;
+    private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txtCode;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtPrice;

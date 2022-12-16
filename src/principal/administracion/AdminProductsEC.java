@@ -390,6 +390,7 @@ public class AdminProductsEC extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Por favor rellene todos los espacios");
         }
     }
+
     private void comboProveedor() {
         PreparedStatement ps = null;
         ResultSet rs = null;

@@ -1,10 +1,6 @@
 package principal.administracion.Tienda.panelsShop;
 
-import java.io.*;
-import java.util.logging.*;
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import principal.administracion.AdminProductsEC;
 
 public class Carrito extends javax.swing.JPanel {
 
@@ -13,8 +9,7 @@ public class Carrito extends javax.swing.JPanel {
 
     public Carrito() {
         initComponents();
-        dtm = (DefaultTableModel) tblProducts.getModel();
-        cargarDatos();
+        
         txtPrice.setEditable(false);
         txtCode.setEditable(false);
         txtName.setEditable(false);
@@ -125,7 +120,7 @@ public class Carrito extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1073, Short.MAX_VALUE)
+            .addGap(0, 1075, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -144,117 +139,27 @@ public class Carrito extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
-        String filePath = "carrito.txt";
-        String linea;
-        String[] linea2 = null;
-        File file = new File(filePath);
-        int resultado = 0;
-        int sumador = 0;
-
-        try {
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-
-            while ((linea = br.readLine()) != null) {
-                linea2 = linea.split(" ");
-                int total = Integer.parseInt(linea2[2]);
-                int total2 = Integer.parseInt(linea2[3]);
-                resultado = total * total2;
-                sumador += resultado;
-            }
-            JOptionPane.showMessageDialog(null, """
-                                                \u00a1\u00a1\u00a1Gracias por su compra!!!
-                                                  Su total es: """ + sumador + " Pesos");
-
-            BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
-            bw.write("");
-            bw.close();
-            dtm.getDataVector().removeAllElements();
-            tblProducts.updateUI();
-
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(AdminProductsEC.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Carrito.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }//GEN-LAST:event_btnComprarActionPerformed
 
     private void tblProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductsMouseClicked
-        int seleccionar = tblProducts.rowAtPoint(evt.getPoint());
-        txtCode.setText(String.valueOf(tblProducts.getValueAt(seleccionar, 0)));
-        txtName.setText(String.valueOf(tblProducts.getValueAt(seleccionar, 1)));
-        txtPrice.setText(String.valueOf(tblProducts.getValueAt(seleccionar, 2)));
-        txtAmount.setText(String.valueOf(tblProducts.getValueAt(seleccionar, 3)));
+        
     }//GEN-LAST:event_tblProductsMouseClicked
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        if (validarCantidad(txtAmount.getText())) {
-            filaSeleccionada = tblProducts.getSelectedRow();
-            if (filaSeleccionada != -1) {
-                tblProducts.setValueAt(txtCode.getText(), filaSeleccionada, 0);
-                tblProducts.setValueAt(txtName.getText(), filaSeleccionada, 1);
-                tblProducts.setValueAt(txtPrice.getText(), filaSeleccionada, 2);
-                tblProducts.setValueAt(txtAmount.getText(), filaSeleccionada, 3);
-                limpiar();
-                filaSeleccionada = -1;
-            } else {
-                JOptionPane.showMessageDialog(null, "No has seleccionado ningun dato");
-            }
-            actualizarTabla();
-        } else {
-            JOptionPane.showMessageDialog(null, "Digite la cantidad en números", "Advertencia", JOptionPane.WARNING_MESSAGE);
-        }
+        
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        int fila = tblProducts.getSelectedRow();
-        if (fila >= 0) {
-            dtm.removeRow(fila);
-        } else {
-            JOptionPane.showMessageDialog(null, "Seleccionar Fila");
-        }
-        actualizarTabla();
-        limpiar();
+        
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void actualizarTabla() {
-        String filePath = "carrito.txt";
-        File file = new File(filePath);
-        try {
-            FileWriter fw = new FileWriter(file);
-            BufferedWriter bw = new BufferedWriter(fw);
-
-            for (int i = 0; i < tblProducts.getRowCount(); i++) {
-                for (int j = 0; j < tblProducts.getColumnCount(); j++) {
-                    bw.write(tblProducts.getValueAt(i, j).toString() + " ");
-                }
-                bw.newLine();
-            }
-            bw.close();
-            fw.close();
-        } catch (IOException ex) {
-            Logger.getLogger(AdminProductsEC.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
 
     private void cargarDatos() {
-        String filePath = "carrito.txt";
-        File file = new File(filePath);
-
-        try {
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-
-            DefaultTableModel model = (DefaultTableModel) tblProducts.getModel();
-            Object[] lines = br.lines().toArray();
-
-            for (Object line : lines) {
-                String[] row = line.toString().split(" ");
-                model.addRow(row);
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(AdminProductsEC.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
 
     public void limpiar() {
