@@ -41,7 +41,7 @@ public class Tienda extends javax.swing.JFrame {
                 productosActionPerformed(evt);
             }
         });
-        getContentPane().add(productos, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 200, -1, -1));
+        getContentPane().add(productos, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 250, -1, -1));
 
         carrito.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/BtnCarrito.png"))); // NOI18N
         carrito.setBorder(null);
@@ -52,7 +52,7 @@ public class Tienda extends javax.swing.JFrame {
                 carritoActionPerformed(evt);
             }
         });
-        getContentPane().add(carrito, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 360, -1, -1));
+        getContentPane().add(carrito, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 350, -1, -1));
 
         salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/energia.png"))); // NOI18N
         salir.setBorder(null);
@@ -79,28 +79,12 @@ public class Tienda extends javax.swing.JFrame {
         getContentPane().add(butonRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 710, 130, 40));
 
         labelLogo.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
-        labelLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/vitarrico_logo 4.png"))); // NOI18N
-        labelLogo.setText("Vitarrico");
-        getContentPane().add(labelLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        labelLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/vitarrico_logo 2.png"))); // NOI18N
+        getContentPane().add(labelLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
 
-        rectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/Rectangle.png"))); // NOI18N
+        rectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/Dashboard.png"))); // NOI18N
         getContentPane().add(rectangulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-
-        content.setBackground(new java.awt.Color(255, 255, 255));
-        content.setForeground(new java.awt.Color(0, 0, 0));
-
-        javax.swing.GroupLayout contentLayout = new javax.swing.GroupLayout(content);
-        content.setLayout(contentLayout);
-        contentLayout.setHorizontalGroup(
-            contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1100, Short.MAX_VALUE)
-        );
-        contentLayout.setVerticalGroup(
-            contentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 770, Short.MAX_VALUE)
-        );
-
-        getContentPane().add(content, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 0, 1100, 770));
+        getContentPane().add(content, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, -10, 1070, 770));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
