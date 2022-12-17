@@ -308,7 +308,6 @@ public class AdminProductsR extends javax.swing.JPanel {
                 }
                 modelo.addRow(filas);
             }
-
         } catch (SQLException ex) {
             System.err.println(ex.toString());
         }

@@ -187,19 +187,17 @@ public class AdminProductsEC extends javax.swing.JPanel {
 
             int fila = tblProducts.getSelectedRow();
             String codigo = tblProducts.getValueAt(fila, 0).toString();
-            System.out.println(fila);
-            System.out.println(codigo);
 
             ps = conn.prepareStatement("SELECT id_producto, nombre, precio, cantidad, id_proveedor FROM productos WHERE id_producto=?");
             ps.setString(1, codigo);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                txtCode.setText(rs.getString("id_producto"));
-                txtName.setText(rs.getString("nombre"));
-                txtPrice.setText(rs.getString("precio"));
-                txtAmount.setText(rs.getString("cantidad"));
-                txtProveedor.setText(rs.getString("id_proveedor"));
+                txtCode.setText(rs.getString(1));
+                txtName.setText(rs.getString(2));
+                txtPrice.setText(rs.getString(3));
+                txtAmount.setText(rs.getString(4));
+                txtProveedor.setText(rs.getString(5));
             }
         } catch (SQLException ex) {
             System.out.println(ex.toString());
