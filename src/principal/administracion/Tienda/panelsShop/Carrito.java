@@ -1,15 +1,15 @@
 package principal.administracion.Tienda.panelsShop;
 
+import java.sql.*;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import principal.logANDres.*;
 
 public class Carrito extends javax.swing.JPanel {
 
-    DefaultTableModel dtm;
-    int filaSeleccionada;
-
     public Carrito() {
         initComponents();
-        
+        rellenarTablaCarrito();
         txtPrice.setEditable(false);
         txtCode.setEditable(false);
         txtName.setEditable(false);
@@ -34,10 +34,12 @@ public class Carrito extends javax.swing.JPanel {
         tblProducts = new javax.swing.JTable();
         btnActualizar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        txtBuscar = new javax.swing.JTextField();
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/TitleBarCarrito.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/TitleBarCarritoTienda.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1080, -1));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/BtnCo.png"))); // NOI18N
@@ -56,7 +58,7 @@ public class Carrito extends javax.swing.JPanel {
         jPanel1.add(txtPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 300, 680, 50));
         jPanel1.add(txtAmount, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 380, 680, 50));
 
-        btnComprar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/Comprar.png"))); // NOI18N
+        btnComprar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/btnComprar.png"))); // NOI18N
         btnComprar.setToolTipText("");
         btnComprar.setBorder(null);
         btnComprar.setBorderPainted(false);
@@ -66,24 +68,8 @@ public class Carrito extends javax.swing.JPanel {
                 btnComprarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnComprar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 200, 130, 50));
+        jPanel1.add(btnComprar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 200, 120, 50));
 
-        tblProducts.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Código", "nombre", "Precio", "Cantidad"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
         tblProducts.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblProductsMouseClicked(evt);
@@ -103,7 +89,7 @@ public class Carrito extends javax.swing.JPanel {
                 btnActualizarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 300, 130, 50));
+        jPanel1.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 300, 120, 50));
 
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/Eliminar.png"))); // NOI18N
         btnEliminar.setBorderPainted(false);
@@ -114,7 +100,22 @@ public class Carrito extends javax.swing.JPanel {
                 btnEliminarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 400, 130, 50));
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 400, 120, 50));
+
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/Buscar.png"))); // NOI18N
+        btnBuscar.setBorder(null);
+        btnBuscar.setBorderPainted(false);
+        btnBuscar.setContentAreaFilled(false);
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 500, -1, -1));
+
+        txtBuscar.setToolTipText("Solo Codigo");
+        txtBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 560, 120, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -139,27 +140,138 @@ public class Carrito extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarActionPerformed
-        
+
     }//GEN-LAST:event_btnComprarActionPerformed
 
     private void tblProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductsMouseClicked
-        
+        try {
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+
+            Conexion objCon = new Conexion();
+            Connection conn = objCon.getConection();
+
+            int fila = tblProducts.getSelectedRow();
+            String codigo = tblProducts.getValueAt(fila, 0).toString();
+            ps = conn.prepareStatement("SELECT id_producto, nombre, precio, cantidad FROM carrito WHERE id_producto = ?");
+            ps.setString(1, codigo);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                txtCode.setText(rs.getString(1));
+                txtName.setText(rs.getString(2));
+                txtPrice.setText(rs.getString(3));
+                txtAmount.setText(rs.getString(4));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e);
+        }
     }//GEN-LAST:event_tblProductsMouseClicked
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        
+        if (!txtAmount.getText().isEmpty() && validarCantidad(txtAmount.getText())) {
+            try {
+                PreparedStatement ps = null;
+                Conexion objCon = new Conexion();
+                Connection con = objCon.getConection();
+                
+                String sql = "UPDATE carrito SET cantidad = ? where id_producto = ?";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, txtAmount.getText());
+                ps.setString(2, txtCode.getText());
+                
+                int res = ps.executeUpdate();
+                
+                if (res > 0 ) {
+                    System.out.println("Producto Actualizado");
+                    limpiar();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error: " + e);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Error con la cantidad");
+        }
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        
+        try {
+            PreparedStatement ps = null;
+
+            Conexion objCon = new Conexion();
+            Connection conn = objCon.getConection();
+
+            int fila = tblProducts.getSelectedRow();
+            String codigo = tblProducts.getValueAt(fila, 0).toString();
+
+            String sql = "DELETE FROM carrito WHERE id_producto = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, codigo);
+            
+            int res = ps.executeUpdate();
+
+            if (res > 0) {
+                System.out.println("Producto eliminado del carrito");
+                rellenarTablaCarrito();
+                limpiar();
+            } else {
+                System.out.println("Error al eliminar");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e);
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void actualizarTabla() {
-        
-    }
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        rellenarTablaCarrito();
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void cargarDatos() {
-        
+    private void rellenarTablaCarrito() {
+        String campo = txtBuscar.getText();
+        String where = "";
+        if (!"".equals(campo)) {
+            where = "WHERE id_producto = '" + campo + "'";
+        }
+
+        try {
+            DefaultTableModel modelo = new DefaultTableModel();
+            tblProducts.setModel(modelo);
+
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConection();
+
+            String sql = "SELECT id_producto, nombre, precio, cantidad FROM carrito " + where;
+            System.out.println(sql);
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            ResultSetMetaData rsMd = (ResultSetMetaData) rs.getMetaData();
+            int cantidadColumnas = rsMd.getColumnCount();
+
+            modelo.addColumn("Código");
+            modelo.addColumn("Producto");
+            modelo.addColumn("Precio");
+            modelo.addColumn("Cantidad");
+
+            int[] anchos = {50, 200, 50, 50};
+
+            for (int i = 0; i < tblProducts.getColumnCount(); i++) {
+                tblProducts.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+            }
+
+            while (rs.next()) {
+                Object[] filas = new Object[cantidadColumnas];
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i + 1);
+                }
+                modelo.addRow(filas);
+            }
+
+        } catch (SQLException ex) {
+            System.err.println(ex.toString());
+        }
     }
 
     public void limpiar() {
@@ -174,6 +286,7 @@ public class Carrito extends javax.swing.JPanel {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnComprar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JLabel jLabel1;
@@ -185,6 +298,7 @@ public class Carrito extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblProducts;
     private javax.swing.JTextField txtAmount;
+    private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txtCode;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtPrice;
