@@ -2,8 +2,7 @@ package principal.administracion.Tienda;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.util.logging.*;
+import java.sql.*;
 import javax.swing.*;
 import principal.administracion.Tienda.panelsShop.*;
 import principal.logANDres.*;
@@ -108,23 +107,14 @@ public class Tienda extends javax.swing.JFrame {
 
     //Regresa al Login borrando el archivo carrito.txt
     private void butonRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butonRegresarActionPerformed
-        BufferedWriter bw;
-        try {
-            String filePath = "carrito.txt";
-            bw = new BufferedWriter(new FileWriter(filePath));
-            bw.write("");
-            bw.close();
-            dispose();
-            JFrame frameMain = new Login();
-            frameMain.setResizable(false);
-            frameMain.setSize(1073, 767);
-            frameMain.setLocationRelativeTo(null);
-            frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frameMain.setVisible(true);
-            bw.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Tienda.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        confirmarRegresar();
+        dispose();
+        JFrame frameMain = new Login();
+        frameMain.setResizable(false);
+        frameMain.setSize(1073, 767);
+        frameMain.setLocationRelativeTo(null);
+        frameMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frameMain.setVisible(true);
     }//GEN-LAST:event_butonRegresarActionPerformed
 
     //Cambia los paneles de la tienda
@@ -145,11 +135,7 @@ public class Tienda extends javax.swing.JFrame {
             addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
-                    try {
-                        confirmarSalida();
-                    } catch (IOException ex) {
-                        Logger.getLogger(Tienda.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    confirmarSalida();
                 }
             });
             this.setVisible(true);
@@ -159,14 +145,83 @@ public class Tienda extends javax.swing.JFrame {
     }
 
     //Confirma la salida del usuario
-    public void confirmarSalida() throws IOException {
+    public void confirmarSalida() {
         int valor = JOptionPane.showConfirmDialog(this, "¿Esta seguro de cerrar la aplicación?", "Advertencia", JOptionPane.YES_NO_OPTION);
 
         if (valor == JOptionPane.YES_OPTION) {
-            try ( BufferedWriter bw = new BufferedWriter(new FileWriter("carrito.txt"))) {
-                bw.write("");
-                System.exit(0);
+            eliminarCarrito();
+            System.exit(0);
+        }
+    }
+
+    public void confirmarRegresar() {
+        int valor = JOptionPane.showConfirmDialog(this, "¿Esta seguro de cerrar la sesion?", "Advertencia", JOptionPane.YES_NO_OPTION);
+
+        if (valor == JOptionPane.YES_OPTION) {
+            eliminarCarrito();
+        }
+    }
+
+    public void eliminarCarrito() {
+        try {
+            Conexion objCon = new Conexion();
+            Connection conn = objCon.getConection();
+
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+
+            ps = conn.prepareStatement("SELECT id_producto, cantidad FROM carrito");
+            rs = ps.executeQuery();
+            System.out.println(rs);
+
+            while (rs.next()) {
+                String idCarrito = rs.getString(1);
+                int cantidadCarrito = rs.getInt(2);
+                try {
+                    PreparedStatement ps2 = null;
+                    ResultSet rs2 = null;
+
+                    ps2 = conn.prepareStatement("SELECT cantidad FROM productos where id_producto = ?");
+                    ps2.setString(1, idCarrito);
+                    rs2 = ps2.executeQuery();
+                    rs2.next();
+                    int cantidadProducto = rs2.getInt(1);
+
+                    int cantidadUpdate = cantidadProducto + cantidadCarrito;
+                    System.out.println(cantidadUpdate);
+                    try {
+                        PreparedStatement ps3 = null;
+                        ps3 = conn.prepareStatement("UPDATE productos SET cantidad = ? WHERE id_producto = ?");
+                        ps3.setInt(1, cantidadUpdate);
+                        ps3.setString(2, idCarrito);
+
+                        int res = ps3.executeUpdate();
+
+                        if (res > 0) {
+                            try {
+                                PreparedStatement ps4 = null;
+
+                                ps4 = conn.prepareStatement("DELETE FROM carrito");
+
+                                int res2 = ps4.executeUpdate();
+                                if (res2 > 0) {
+                                    System.out.println("Carrito eliminado");
+                                } else {
+                                    System.out.println("Error al eliminar");
+                                }
+                            } catch (SQLException ex) {
+                                System.out.println("Error 1: " + ex);
+                            }
+                        }
+                    } catch (SQLException ex) {
+                        System.out.println("Error 4: " + ex);
+                    }
+                } catch (SQLException ex1) {
+                    System.out.println("Error 3: " + ex1);
+                }
             }
+        } catch (SQLException e) {
+            System.out.println("Error 1: " + e);
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables

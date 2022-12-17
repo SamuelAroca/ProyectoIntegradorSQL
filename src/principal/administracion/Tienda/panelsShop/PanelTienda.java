@@ -50,7 +50,7 @@ public class PanelTienda extends javax.swing.JPanel {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/TitleBarProductos.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/TitleBarTienda.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1080, -1));
 
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/BtnCo.png"))); // NOI18N
@@ -129,7 +129,7 @@ public class PanelTienda extends javax.swing.JPanel {
         jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 380, 120, 30));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/dolar-de-saco.png"))); // NOI18N
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 520, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 520, -1, -1));
 
         tAreaCarrito.setLineWrap(true);
         jScrollPane2.setViewportView(tAreaCarrito);
@@ -137,10 +137,10 @@ public class PanelTienda extends javax.swing.JPanel {
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 540, 170, 210));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/bolsas-de-compras.png"))); // NOI18N
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 520, -1, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 520, -1, -1));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/hastag.png"))); // NOI18N
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 520, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 520, -1, -1));
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/shopping-bag-anadir.png"))); // NOI18N
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 520, -1, -1));
@@ -169,18 +169,18 @@ public class PanelTienda extends javax.swing.JPanel {
 
     //Guarda los productos seleccionados en el carrito
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        try {                                           
+        try {
             Conexion conn = new Conexion();
             Connection con = conn.getConection();
-            
+
             PreparedStatement ps2 = null;
             ResultSet rs = null;
-            
+
             String sql = "SELECT id_producto FROM carrito where id_producto = ?";
             ps2 = con.prepareStatement(sql);
             ps2.setString(1, txtCode.getText());
             rs = ps2.executeQuery();
-            
+
             if (rs.next()) {
                 JOptionPane.showMessageDialog(null, "          No repita productos \nEditar la cantidad desde el carrito");
                 limpiar();
@@ -190,27 +190,31 @@ public class PanelTienda extends javax.swing.JPanel {
                     int numero = 0;
                     numero = Integer.parseInt(cantidad);
                     System.out.println(numero);
-                    if (validarCantidad(txtAmount.getText()) && !txtAmount.getText().isEmpty() && existencia(numero)) {
-                        PreparedStatement ps = null;
+                    if (validarCantidad(txtAmount.getText()) && !txtAmount.getText().isEmpty()) {
+                        if (existencia(numero)) {
+                            PreparedStatement ps = null;
 
-                        ps = con.prepareStatement("INSERT INTO carrito (id_producto, nombre, precio, cantidad) VALUES (?,?,?,?)");
-                        ps.setString(1, txtCode.getText());
-                        ps.setString(2, txtName.getText());
-                        ps.setString(3, txtPrice.getText());
-                        ps.setString(4, txtAmount.getText());
+                            ps = con.prepareStatement("INSERT INTO carrito (id_producto, nombre, precio, cantidad) VALUES (?,?,?,?)");
+                            ps.setString(1, txtCode.getText());
+                            ps.setString(2, txtName.getText());
+                            ps.setString(3, txtPrice.getText());
+                            ps.setString(4, txtAmount.getText());
 
-                        if (!ps.execute()) {
-                            JOptionPane.showMessageDialog(null, "Producto Guardado");
-                            tAreaCarrito.setText(null);
-                            comboTipo.setSelectedIndex(0);
-                            listaCarrito();
-                            rellenarTablaProducto();
-                            limpiar();
+                            if (!ps.execute()) {
+                                JOptionPane.showMessageDialog(null, "Producto Guardado");
+                                tAreaCarrito.setText(null);
+                                comboTipo.setSelectedIndex(0);
+                                listaCarrito();
+                                rellenarTablaProducto();
+                                limpiar();
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Algo anda mal");
+                            }
                         } else {
-                            JOptionPane.showMessageDialog(null, "Algo anda mal");
+                            System.out.println("Fallo en la existencia");
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "validar cantidad");
+                        JOptionPane.showMessageDialog(null, "Verifica la cantidad");
                     }
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "          No repita productos \nEditar la cantidad desde el carrito");
@@ -220,7 +224,7 @@ public class PanelTienda extends javax.swing.JPanel {
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(PanelTienda.class.getName()).log(Level.SEVERE,null, ex);
+            Logger.getLogger(PanelTienda.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -234,10 +238,8 @@ public class PanelTienda extends javax.swing.JPanel {
 
             int fila = tblProducts.getSelectedRow();
             String codigo = tblProducts.getValueAt(fila, 0).toString();
-            System.out.println(fila);
-            System.out.println(codigo);
 
-            ps = conn.prepareStatement("SELECT id_producto, nombre, precio, cantidad FROM productos WHERE id_producto=?");
+            ps = conn.prepareStatement("SELECT id_producto, nombre, precio FROM productos WHERE id_producto=?");
             ps.setString(1, codigo);
             rs = ps.executeQuery();
 
@@ -245,7 +247,6 @@ public class PanelTienda extends javax.swing.JPanel {
                 txtCode.setText(rs.getString("id_producto"));
                 txtName.setText(rs.getString("nombre"));
                 txtPrice.setText(rs.getString("precio"));
-                txtAmount.setText(rs.getString("cantidad"));
             }
         } catch (SQLException ex) {
             System.out.println(ex.toString());
@@ -379,32 +380,23 @@ public class PanelTienda extends javax.swing.JPanel {
 
         try {
 
-            String sql = "SELECT id, id_producto, nombre, precio, cantidad FROM carrito";
+            String sql = "SELECT id_producto, nombre, precio, cantidad FROM carrito";
 
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                String id = rs.getString(1);
-                String codigo = rs.getString(2);
-                String nombre = rs.getString(3);
-                String precio = rs.getString(4);
-                String cantidad = rs.getString(5);
+                String codigo = rs.getString(1);
+                String nombre = rs.getString(2);
+                String precio = rs.getString(3);
+                String cantidad = rs.getString(4);
 
-                String listaTexto = id + " | " + codigo + " | " + nombre + " | " + precio + " | " + cantidad + "\n";
+                String listaTexto = codigo + " | " + nombre + " | " + precio + " | " + cantidad + "\n";
                 tAreaCarrito.append(listaTexto);
             }
         } catch (SQLException e) {
             System.out.println("Error consulta: " + e.getMessage());
         }
-    }
-
-    //Limpia los Label
-    private void limpiar() {
-        txtCode.setText(null);
-        txtName.setText(null);
-        txtPrice.setText(null);
-        txtAmount.setText(null);
     }
 
     public boolean existencia(int cantidad) {
@@ -425,7 +417,7 @@ public class PanelTienda extends javax.swing.JPanel {
 
             while (rs.next()) {
                 int cantidadRecibida = rs.getInt(1);
-                if (cantidad <= cantidadRecibida) {
+                if (cantidad <= cantidadRecibida && cantidad > 0) {
                     try {
                         PreparedStatement ps2 = null;
                         int resta = cantidadRecibida - cantidad;
@@ -446,13 +438,21 @@ public class PanelTienda extends javax.swing.JPanel {
                         System.out.println("Error update: " + ex);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Exede la cantidad existente");
+                    JOptionPane.showMessageDialog(null, "Exede la cantidad existente o es menor o igual a 0");
+                    txtAmount.setText(null);
                 }
             }
         } catch (SQLException e) {
             System.out.println("Error primera consulta: " + e);
         }
         return false;
+    }
+
+    private void limpiar() {
+        txtCode.setText(null);
+        txtName.setText(null);
+        txtPrice.setText(null);
+        txtAmount.setText(null);
     }
 
     //Valida que la catidad sea un número
