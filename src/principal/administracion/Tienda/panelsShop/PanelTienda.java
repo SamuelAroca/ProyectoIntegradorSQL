@@ -431,7 +431,6 @@ public class PanelTienda extends javax.swing.JPanel {
 
                         if (res > 0) {
                             System.out.println("Cantidad Actualizada");
-
                             return true;
                         }
                     } catch (SQLException ex) {

@@ -174,15 +174,15 @@ public class Carrito extends javax.swing.JPanel {
                 PreparedStatement ps = null;
                 Conexion objCon = new Conexion();
                 Connection con = objCon.getConection();
-                
+
                 String sql = "UPDATE carrito SET cantidad = ? where id_producto = ?";
                 ps = con.prepareStatement(sql);
                 ps.setString(1, txtAmount.getText());
                 ps.setString(2, txtCode.getText());
-                
+
                 int res = ps.executeUpdate();
-                
-                if (res > 0 ) {
+
+                if (res > 0) {
                     System.out.println("Producto Actualizado");
                     limpiar();
                 }
@@ -204,18 +204,22 @@ public class Carrito extends javax.swing.JPanel {
             int fila = tblProducts.getSelectedRow();
             String codigo = tblProducts.getValueAt(fila, 0).toString();
 
-            String sql = "DELETE FROM carrito WHERE id_producto = ?";
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, codigo);
-            
-            int res = ps.executeUpdate();
+            if (actualizarCantidad(codigo)) {
+                String sql = "DELETE FROM carrito WHERE id_producto = ?";
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, codigo);
 
-            if (res > 0) {
-                System.out.println("Producto eliminado del carrito");
-                rellenarTablaCarrito();
-                limpiar();
+                int res = ps.executeUpdate();
+
+                if (res > 0) {
+                    System.out.println("Producto eliminado del carrito");
+                    rellenarTablaCarrito();
+                    limpiar();
+                } else {
+                    System.out.println("Error al eliminar");
+                }
             } else {
-                System.out.println("Error al eliminar");
+                System.out.println("Error al actualizar");
             }
         } catch (SQLException e) {
             System.out.println("Error: " + e);
@@ -272,6 +276,59 @@ public class Carrito extends javax.swing.JPanel {
         } catch (SQLException ex) {
             System.err.println(ex.toString());
         }
+    }
+
+    public boolean actualizarCantidad(String codigo) {
+        try {
+            Conexion objCon = new Conexion();
+            Connection conn = objCon.getConection();
+
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+
+            ps = conn.prepareStatement("SELECT id_producto, cantidad FROM carrito WHERE id_producto = ?");
+            ps.setString(1, codigo);
+            rs = ps.executeQuery();
+            System.out.println(rs);
+
+            while (rs.next()) {
+                String idCarrito = rs.getString(1);
+                int cantidadCarrito = rs.getInt(2);
+                try {
+                    PreparedStatement ps2 = null;
+                    ResultSet rs2 = null;
+
+                    ps2 = conn.prepareStatement("SELECT cantidad FROM productos where id_producto = ?");
+                    ps2.setString(1, idCarrito);
+                    rs2 = ps2.executeQuery();
+                    rs2.next();
+                    int cantidadProducto = rs2.getInt(1);
+
+                    int cantidadUpdate = cantidadProducto + cantidadCarrito;
+                    System.out.println(cantidadUpdate);
+                    try {
+                        PreparedStatement ps3 = null;
+                        ps3 = conn.prepareStatement("UPDATE productos SET cantidad = ? WHERE id_producto = ?");
+                        ps3.setInt(1, cantidadUpdate);
+                        ps3.setString(2, idCarrito);
+
+                        int res = ps3.executeUpdate();
+
+                        if (res > 0) {
+                            System.out.println("Producto eliminado o actualizado");
+                            return true;
+                        }
+                    } catch (SQLException ex) {
+                        System.out.println("Error 3: " + ex);
+                    }
+                } catch (SQLException ex1) {
+                    System.out.println("Error 2: " + ex1);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error 1: " + e);
+        }
+        return false;
     }
 
     public void limpiar() {
