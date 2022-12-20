@@ -347,7 +347,7 @@ public class AdminProductsEC extends javax.swing.JPanel {
                     PreparedStatement ps = null;
                     Conexion objCon = new Conexion();
                     Connection conn = objCon.getConection();
-                    ps = conn.prepareStatement("UPDATE productos set id_producto=?, nombre=?, precio=?, cantidad=?, id_proveedor=? where id_producto=?");
+                    ps = conn.prepareStatement("UPDATE productos SET id_producto=?, nombre=?, precio=?, cantidad=?, id_proveedor=? where id_producto=?");
                     ps.setString(1, txtCode.getText());
                     ps.setString(2, txtName.getText());
                     ps.setString(3, txtPrice.getText());
