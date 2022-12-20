@@ -204,7 +204,7 @@ public class Carrito extends javax.swing.JPanel {
             int fila = tblProducts.getSelectedRow();
             String codigo = tblProducts.getValueAt(fila, 0).toString();
 
-            if (actualizarCantidad(codigo)) {
+            if (actualizarEliminado(codigo)) {
                 String sql = "DELETE FROM carrito WHERE id_producto = ?";
                 ps = conn.prepareStatement(sql);
                 ps.setString(1, codigo);
@@ -278,7 +278,7 @@ public class Carrito extends javax.swing.JPanel {
         }
     }
 
-    public boolean actualizarCantidad(String codigo) {
+    public boolean actualizarEliminado(String codigo) {
         try {
             Conexion objCon = new Conexion();
             Connection conn = objCon.getConection();
@@ -329,6 +329,70 @@ public class Carrito extends javax.swing.JPanel {
             System.out.println("Error 1: " + e);
         }
         return false;
+    }
+
+    public void productoActualizado(String codigo, int cantidadNueva, int cantidadActual) {
+        try {
+            Conexion objCon = new Conexion();
+            Connection conn = objCon.getConection();
+
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+
+            ps = conn.prepareStatement("SELECT cantidad FROM productos WHERE id_producto = ?");
+            ps.setString(1, codigo);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int cantidadProducto = rs.getInt(1);
+                int diferencia = 0;
+                int cantidadActualizadaProducto = 0;
+
+                if (cantidadNueva > cantidadActual) {
+                    diferencia = cantidadNueva - cantidadActual;
+
+                    cantidadActualizadaProducto = cantidadProducto - diferencia;
+                    
+                    PreparedStatement ps1 = null;
+                    
+                    ps1 = conn.prepareStatement("UPDATE carrito SET cantidad = ? WHERE id_producto = ?");
+                    ps1.setInt(1, cantidadNueva);
+                    ps1.setString(2, codigo);
+                    int res = ps1.executeUpdate();
+                    
+                    if (res > 0) {
+                        PreparedStatement ps2 = null;
+                        
+                        ps2 = conn.prepareStatement("UPDATE productos SET cantidad = ? WHERE id_producto = ?");
+                        ps2.setInt(1, cantidadActualizadaProducto);
+                        ps2.setString(2, codigo);
+                        int res2 = ps2.executeUpdate();
+                        
+                        if (res2 > 0) {
+                            System.out.println("Cantidad de producto actualizada");
+                            JOptionPane.showMessageDialog(null, "Producto actualizado");
+                        } else {
+                            System.out.println("Cantidad de producto no actualizada");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error al actualizar");
+                    }
+                    
+                    
+                    // Terminar si es menor
+                    
+                    
+                    
+                } else if (cantidadNueva < cantidadActual) {
+                    diferencia = cantidadActual - cantidadNueva;
+                } else if (cantidadNueva == cantidadActual) {
+                    JOptionPane.showMessageDialog(null, "          No se actualizo nada \nPonga una cantidad diferente si desea actualizar");
+                }
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar: " + e);
+        }
     }
 
     public void limpiar() {
