@@ -172,19 +172,21 @@ public class Carrito extends javax.swing.JPanel {
         if (!txtAmount.getText().isEmpty() && validarCantidad(txtAmount.getText())) {
             try {
                 PreparedStatement ps = null;
+                ResultSet rs = null;
                 Conexion objCon = new Conexion();
                 Connection con = objCon.getConection();
 
-                String sql = "UPDATE carrito SET cantidad = ? where id_producto = ?";
-                ps = con.prepareStatement(sql);
-                ps.setString(1, txtAmount.getText());
-                ps.setString(2, txtCode.getText());
+                String codigo = txtCode.getText();
+                int cantidadNueva = Integer.parseInt(txtAmount.getText());
+                ps = con.prepareStatement("SELECT cantidad FROM carrito WHERE id_producto = ?");
+                ps.setString(1, codigo);
+                rs = ps.executeQuery();
 
-                int res = ps.executeUpdate();
-
-                if (res > 0) {
-                    System.out.println("Producto Actualizado");
-                    limpiar();
+                if (rs.next()) {
+                    int cantidadActual = rs.getInt(1);
+                    productoActualizado(codigo, cantidadNueva, cantidadActual);
+                } else {
+                    System.out.println("Error: rs.next");
                 }
             } catch (SQLException e) {
                 System.out.println("Error: " + e);
@@ -345,51 +347,134 @@ public class Carrito extends javax.swing.JPanel {
 
             if (rs.next()) {
                 int cantidadProducto = rs.getInt(1);
+
                 int diferencia = 0;
                 int cantidadActualizadaProducto = 0;
 
-                if (cantidadNueva > cantidadActual) {
-                    diferencia = cantidadNueva - cantidadActual;
+                if (cantidadProducto > 0) {
+                    if (cantidadNueva > cantidadActual && cantidadNueva > 0) {
+                        diferencia = cantidadNueva - cantidadActual;
 
-                    cantidadActualizadaProducto = cantidadProducto - diferencia;
-                    
-                    PreparedStatement ps1 = null;
-                    
-                    ps1 = conn.prepareStatement("UPDATE carrito SET cantidad = ? WHERE id_producto = ?");
-                    ps1.setInt(1, cantidadNueva);
-                    ps1.setString(2, codigo);
-                    int res = ps1.executeUpdate();
-                    
-                    if (res > 0) {
-                        PreparedStatement ps2 = null;
-                        
-                        ps2 = conn.prepareStatement("UPDATE productos SET cantidad = ? WHERE id_producto = ?");
-                        ps2.setInt(1, cantidadActualizadaProducto);
-                        ps2.setString(2, codigo);
-                        int res2 = ps2.executeUpdate();
-                        
-                        if (res2 > 0) {
-                            System.out.println("Cantidad de producto actualizada");
-                            JOptionPane.showMessageDialog(null, "Producto actualizado");
+                        if (diferencia <= cantidadProducto) {
+                            cantidadActualizadaProducto = cantidadProducto - diferencia;
+
+                            PreparedStatement ps1 = null;
+
+                            ps1 = conn.prepareStatement("UPDATE carrito SET cantidad = ? WHERE id_producto = ?");
+                            ps1.setInt(1, cantidadNueva);
+                            ps1.setString(2, codigo);
+                            int res = ps1.executeUpdate();
+
+                            if (res > 0) {
+                                PreparedStatement ps2 = null;
+
+                                ps2 = conn.prepareStatement("UPDATE productos SET cantidad = ? WHERE id_producto = ?");
+                                ps2.setInt(1, cantidadActualizadaProducto);
+                                ps2.setString(2, codigo);
+                                int res2 = ps2.executeUpdate();
+
+                                if (res2 > 0) {
+                                    System.out.println("Cantidad de producto actualizada");
+                                    rellenarTablaCarrito();
+                                    JOptionPane.showMessageDialog(null, "Producto actualizado");
+                                    limpiar();
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Producto no actualizado");
+                                }
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Error al actualizar");
+                            }
                         } else {
-                            System.out.println("Cantidad de producto no actualizada");
+                            JOptionPane.showMessageDialog(null, "La cantidad excede los limites 1");
+                        }
+                    } else if (cantidadNueva < cantidadActual && cantidadNueva > 0) {
+
+                        diferencia = cantidadActual - cantidadNueva;
+
+                        cantidadActualizadaProducto = cantidadProducto + diferencia;
+
+                        PreparedStatement ps1 = null;
+
+                        ps1 = conn.prepareStatement("UPDATE carrito SET cantidad = ? WHERE id_producto = ?");
+                        ps1.setInt(1, cantidadNueva);
+                        ps1.setString(2, codigo);
+                        int res = ps1.executeUpdate();
+
+                        if (res > 0) {
+                            PreparedStatement ps2 = null;
+
+                            ps2 = conn.prepareStatement("UPDATE productos SET cantidad = ? WHERE id_producto = ?");
+                            ps2.setInt(1, cantidadActualizadaProducto);
+                            ps2.setString(2, codigo);
+                            int res2 = ps2.executeUpdate();
+
+                            if (res2 > 0) {
+                                System.out.println("Cantidad de producto actualizada");
+                                rellenarTablaCarrito();
+                                JOptionPane.showMessageDialog(null, "Producto actualizado");
+                                limpiar();
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Producto no actualizado");
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error al actualizar");
+                        }
+                    } else if (cantidadNueva == cantidadActual) {
+                        JOptionPane.showMessageDialog(null, "          No se actualizo nada \nPonga una cantidad diferente si desea actualizar");
+                    } else if (cantidadNueva == 0) {
+                        JOptionPane.showMessageDialog(null, "No esta permitido el 0");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Verifique la cantidad");
+                    }
+                } else {
+                    PreparedStatement ps1 = null;
+                    ResultSet rs1 = null;
+
+                    ps1 = conn.prepareStatement("SELECT cantidad FROM carrito WHERE id_producto = ?");
+                    ps1.setString(1, codigo);
+
+                    rs1 = ps1.executeQuery();
+                    int cantidadUpdate = 0;
+                    if (rs1.next()) {
+                        int cantidadCarrito = rs1.getInt(1);
+                        System.out.println(cantidadCarrito + " Prueba");
+                        if (cantidadNueva < cantidadCarrito) {
+                            cantidadUpdate = cantidadCarrito - cantidadNueva;
+                            System.out.println(cantidadUpdate);
+                            PreparedStatement ps2 = null;
+                            ps2 = conn.prepareStatement("UPDATE productos SET cantidad = ? WHERE id_producto = ?");
+                            ps2.setInt(1, cantidadUpdate);
+                            ps2.setString(2, codigo);
+                            int res = ps2.executeUpdate();
+                            if (res > 0) {
+                                JOptionPane.showMessageDialog(null, "Producto actualizado");
+                                limpiar();
+                                PreparedStatement ps3 = null;
+                                ps3 = conn.prepareStatement("UPDATE carrito SET cantidad = ? WHERE id_producto = ?");
+                                ps3.setInt(1, cantidadNueva);
+                                ps3.setString(2, codigo);
+
+                                int res1 = ps3.executeUpdate();
+                                if (res1 > 0) {
+                                    System.out.println("Producto actualizado en productos");
+                                    rellenarTablaCarrito();
+                                    limpiar();
+                                } else {
+                                    System.out.println("Error en res1");
+                                }
+                            } else {
+                                System.out.println("Error en res");
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No hay mas existencias 1");
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "Error al actualizar");
+                        System.out.println("Error en rs1");
                     }
-                    
-                    
-                    // Terminar si es menor
-                    
-                    
-                    
-                } else if (cantidadNueva < cantidadActual) {
-                    diferencia = cantidadActual - cantidadNueva;
-                } else if (cantidadNueva == cantidadActual) {
-                    JOptionPane.showMessageDialog(null, "          No se actualizo nada \nPonga una cantidad diferente si desea actualizar");
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Error en rs.next");
             }
-
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al actualizar: " + e);
         }
