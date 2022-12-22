@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.logging.*;
 import javax.swing.*;
 import principal.*;
-import principal.administracion.Tienda.Tienda;
+import principal.administracion.Tienda.*;
 import principal.admins.Admins;
 
 public class Login extends javax.swing.JFrame {
@@ -147,23 +147,29 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnLoginActionPerformed
     public void loguear(String tabla) {
-        PreparedStatement ps;
-        ResultSet rs;
         try {
-            if (!txtId.getText().isEmpty() && !txtName.getText().isEmpty() && !txtPassword.getText().isEmpty()) {
-
+            String id = txtId.getText();
+            String nombre = txtName.getText();
+            String cantraseña = txtPassword.getText();
+            
+            if (!id.isEmpty() && !nombre.isEmpty() && !cantraseña.isEmpty()) {
+                PreparedStatement ps;
+                ResultSet rs;
+                
                 Conexion objCon = new Conexion();
                 Connection conn = objCon.getConection();
+                
                 ps = conn.prepareStatement("SELECT identificacion,nombre,contraseña FROM " + tabla + " WHERE identificacion = ? AND nombre = ? AND contraseña = ?");
-                ps.setString(1, txtId.getText());
-                ps.setString(2, txtName.getText());
-                ps.setString(3, txtPassword.getText());
+                ps.setString(1, id);
+                ps.setString(2, nombre);
+                ps.setString(3, cantraseña);
                 System.out.println(ps);
 
                 rs = ps.executeQuery();
 
                 if (rs.next()) {
                     if (Objects.equals(comboTipoUser.getSelectedItem(), "Cliente")) {
+                        usuarioActual(id, nombre, cantraseña);
                         dispose();
                         JFrame frameTienda = new Tienda();
                         frameTienda.setResizable(false);
@@ -172,6 +178,7 @@ public class Login extends javax.swing.JFrame {
                         frameTienda.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         frameTienda.setVisible(true);
                     } else if (Objects.equals(comboTipoUser.getSelectedItem(), "Administrador")) {
+                        usuarioActual(id, nombre, cantraseña);
                         dispose();
                         JFrame frameAdmin = new Admins();
                         frameAdmin.setResizable(false);
@@ -192,7 +199,32 @@ public class Login extends javax.swing.JFrame {
 
         }
     }
-//Dirige al Frame Contactos
+    
+    public void usuarioActual(String id, String nombre, String contraseña) {
+        try {
+            PreparedStatement ps = null;
+            
+            Conexion objCon = new Conexion();
+            Connection con = objCon.getConection();
+            
+            ps = con.prepareStatement("INSERT INTO usuario_actual (id_usuario, nombre, contraseña) VALUES (?,?,?)");
+            ps.setString(1, id);
+            ps.setString(2, nombre);
+            ps.setString(3, contraseña);
+            
+            int res = ps.executeUpdate();
+            
+            if (res > 0) {
+                System.out.println("Usuario actual registrado");
+            } else {
+                System.out.println("Usuario actual no registrado");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e);
+        }
+    }
+    
+    //Dirige al Frame Contactos
     private void btnContacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContacActionPerformed
         dispose();
         JFrame frameContacto = new Contactos();

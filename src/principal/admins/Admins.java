@@ -1,6 +1,8 @@
 package principal.admins;
 
 import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
 import javax.swing.*;
 import principal.administracion.*;
 import principal.logANDres.*;
@@ -11,6 +13,7 @@ public class Admins extends javax.swing.JFrame {
         initComponents();
         JPanel p1 = new AdminProductsR();
         changePanels(p1);
+        cerrar();
     }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -141,6 +144,42 @@ public class Admins extends javax.swing.JFrame {
         content.add(p, BorderLayout.CENTER);
         content.revalidate();
         content.repaint();
+    }
+    
+    private void cerrar() {
+        try {
+            this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    eliminarUsuarioActual();
+                }
+            });
+            this.setVisible(true);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+    
+    private void eliminarUsuarioActual() {
+        try {
+            PreparedStatement ps = null;
+
+            Conexion objCon = new Conexion();
+            Connection con = objCon.getConection();
+
+            ps = con.prepareStatement("DELETE FROM usuario_actual");
+
+            int res = ps.executeUpdate();
+
+            if (res > 0) {
+                System.out.println("Usuario actual eliminado");
+            } else {
+                System.out.println("Error al eliminar el usuario actual");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex);
+        }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdminPE;
