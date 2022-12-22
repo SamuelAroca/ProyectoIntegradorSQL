@@ -108,6 +108,7 @@ public class Tienda extends javax.swing.JFrame {
     //Regresa al Login borrando el archivo carrito.txt
     private void butonRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butonRegresarActionPerformed
         confirmarRegresar();
+        eliminarUsuarioActual();
         dispose();
         JFrame frameMain = new Login();
         frameMain.setResizable(false);
@@ -135,6 +136,7 @@ public class Tienda extends javax.swing.JFrame {
             addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
+                    eliminarUsuarioActual();
                     confirmarSalida();
                 }
             });
@@ -151,6 +153,9 @@ public class Tienda extends javax.swing.JFrame {
         if (valor == JOptionPane.YES_OPTION) {
             eliminarCarrito();
             System.exit(0);
+        } else if (valor == JOptionPane.NO_OPTION) {
+            PanelTienda pt = new PanelTienda();
+            showPanel(pt);
         }
     }
 
@@ -159,6 +164,30 @@ public class Tienda extends javax.swing.JFrame {
 
         if (valor == JOptionPane.YES_OPTION) {
             eliminarCarrito();
+        } else if (valor == JOptionPane.NO_OPTION) {
+            PanelTienda pt = new PanelTienda();
+            showPanel(pt);
+        }
+    }
+
+    private void eliminarUsuarioActual() {
+        try {
+            PreparedStatement ps = null;
+
+            Conexion objCon = new Conexion();
+            Connection con = objCon.getConection();
+
+            ps = con.prepareStatement("DELETE FROM usuario_actual");
+
+            int res = ps.executeUpdate();
+
+            if (res > 0) {
+                System.out.println("Usuario actual eliminado");
+            } else {
+                System.out.println("Error al eliminar el usuario actual");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex);
         }
     }
 
