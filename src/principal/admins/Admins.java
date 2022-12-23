@@ -19,6 +19,7 @@ public class Admins extends javax.swing.JFrame {
 
         btnRegresar = new javax.swing.JButton();
         btnRegis = new javax.swing.JButton();
+        btnCompras = new javax.swing.JButton();
         btnModicar = new javax.swing.JButton();
         salir = new javax.swing.JButton();
         btnAdminPE = new javax.swing.JButton();
@@ -59,6 +60,17 @@ public class Admins extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnRegis, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, 150, -1));
+
+        btnCompras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/administracion/comprasRealizadas.png"))); // NOI18N
+        btnCompras.setBorder(null);
+        btnCompras.setBorderPainted(false);
+        btnCompras.setContentAreaFilled(false);
+        btnCompras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComprasActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnCompras, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 500, 150, 70));
 
         btnModicar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/admins/Modificar.png"))); // NOI18N
         btnModicar.setBorderPainted(false);
@@ -145,6 +157,11 @@ public class Admins extends javax.swing.JFrame {
         cerrar();
     }//GEN-LAST:event_formWindowClosing
 
+    private void btnComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprasActionPerformed
+        JPanel p4 = new ComprasRealizadas();
+        changePanels(p4);
+    }//GEN-LAST:event_btnComprasActionPerformed
+
     //Metodo para cambiar los paneles del Frame
     private void changePanels(JPanel p) {
         p.setSize(1075, 767);
@@ -190,6 +207,7 @@ public class Admins extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdminPE;
+    private javax.swing.JButton btnCompras;
     private javax.swing.JButton btnModicar;
     private javax.swing.JButton btnRegis;
     private javax.swing.JButton btnRegresar;

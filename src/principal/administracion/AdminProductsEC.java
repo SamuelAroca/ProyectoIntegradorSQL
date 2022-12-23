@@ -405,9 +405,9 @@ public class AdminProductsEC extends javax.swing.JPanel {
             cbxProveedor.addItem("Proveedor");
 
             while (rs.next()) {
-                String idProveedor = rs.getString("id_proveedor");
-                String nombreProveedor = rs.getString("nombre_proveedor");
-                String tipoProducto = rs.getString("tipo_producto");
+                String idProveedor = rs.getString(1);
+                String nombreProveedor = rs.getString(2);
+                String tipoProducto = rs.getString(3);
                 cbxProveedor.addItem(idProveedor + " | " + nombreProveedor + " | " + tipoProducto);
             }
             rs.close();
