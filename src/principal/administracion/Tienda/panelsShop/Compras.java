@@ -9,6 +9,7 @@ public class Compras extends javax.swing.JPanel {
 
     public Compras() {
         initComponents();
+        rellenarTablaCompras();
     }
 
     @SuppressWarnings("unchecked")
@@ -25,7 +26,7 @@ public class Compras extends javax.swing.JPanel {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/TitleBarTienda.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/TitleBarCompras.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1080, -1));
 
         jScrollPane1.setViewportView(tblProducts);
@@ -51,7 +52,7 @@ public class Compras extends javax.swing.JPanel {
         });
         jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 310, -1, -1));
 
-        txtBuscar.setToolTipText("Solo Codigo");
+        txtBuscar.setToolTipText("Solo Codigo del producto");
         txtBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jPanel1.add(txtBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 370, 120, 30));
 
@@ -114,32 +115,46 @@ public class Compras extends javax.swing.JPanel {
             Conexion objCon = new Conexion();
             Connection conn = objCon.getConection();
 
-            String sql = "SELECT id_producto, nombre, precio, cantidad FROM productos where id_producto LIKE '%" + tabla + "'";
-            ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
+            PreparedStatement ps1 = null;
+            ResultSet rs1 = null;
 
-            ResultSetMetaData rsMd = rs.getMetaData();
-            int cantidadColumnas = rsMd.getColumnCount();
+            ps1 = conn.prepareStatement("SELECT id_usuario FROM usuario_actual");
+            rs1 = ps1.executeQuery();
 
-            modelo.addColumn("Codigo");
-            modelo.addColumn("Nombre");
-            modelo.addColumn("Precio");
-            modelo.addColumn("Cantidad");
+            while (rs1.next()) {
+                int idCliente = rs1.getInt(1);
 
-            int[] anchos = {50, 200, 50, 50};
+                String sql = "SELECT id_producto, nombre_producto, cantidad, precio_total, id_cliente, fecha FROM compras where id_producto LIKE '%" + tabla + "' AND id_cliente = ?";
+                System.out.println(ps);
+                ps = conn.prepareStatement(sql);
+                ps.setInt(1, idCliente);
+                rs = ps.executeQuery();
 
-            for (int x = 0; x < cantidadColumnas; x++) {
-                tblProducts.getColumnModel().getColumn(x).setPreferredWidth(anchos[x]);
-            }
+                ResultSetMetaData rsMd = rs.getMetaData();
+                int cantidadColumnas = rsMd.getColumnCount();
 
-            while (rs.next()) {
+                modelo.addColumn("ID Producto");
+                modelo.addColumn("Nombre Producto");
+                modelo.addColumn("Cantidad");
+                modelo.addColumn("Precio total");
+                modelo.addColumn("ID Cliente");
+                modelo.addColumn("Fecha");
 
-                Object[] filas = new Object[cantidadColumnas];
+                int[] anchos = {50, 50, 50, 50, 50, 50};
 
-                for (int i = 0; i < cantidadColumnas; i++) {
-                    filas[i] = rs.getObject(i + 1);
+                for (int x = 0; x < cantidadColumnas; x++) {
+                    tblProducts.getColumnModel().getColumn(x).setPreferredWidth(anchos[x]);
                 }
-                modelo.addRow(filas);
+
+                while (rs.next()) {
+
+                    Object[] filas = new Object[cantidadColumnas];
+
+                    for (int i = 0; i < cantidadColumnas; i++) {
+                        filas[i] = rs.getObject(i + 1);
+                    }
+                    modelo.addRow(filas);
+                }
             }
         } catch (SQLException ex) {
             System.err.println(ex.toString());
@@ -148,50 +163,62 @@ public class Compras extends javax.swing.JPanel {
 
     //Carga los datos de la tabla
     private void rellenarTablaCompras() {
+        System.out.println("Entra");
         String campo = txtBuscar.getText();
         String where = "";
         if (!"".equals(campo)) {
-            where = "WHERE id_producto = '" + campo + "'";
+            where = "AND id_producto = '" + campo + "'";
         }
-
         try {
+            System.out.println("Dentro del try");
             DefaultTableModel modelo = new DefaultTableModel();
             tblProducts.setModel(modelo);
 
             PreparedStatement ps = null;
             ResultSet rs = null;
-            Conexion conn = new Conexion();
-            Connection con = conn.getConection();
 
-            String sql = "SELECT id_producto, nombre, precio, cantidad FROM productos " + where;
-            System.out.println(sql);
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
+            Conexion objCon = new Conexion();
+            Connection con = objCon.getConection();
 
-            ResultSetMetaData rsMd = (ResultSetMetaData) rs.getMetaData();
-            int cantidadColumnas = rsMd.getColumnCount();
+            PreparedStatement ps1 = null;
+            ResultSet rs1 = null;
 
-            modelo.addColumn("Código");
-            modelo.addColumn("Producto");
-            modelo.addColumn("Precio");
-            modelo.addColumn("Cantidad");
+            ps1 = con.prepareStatement("SELECT id_usuario FROM usuario_actual");
+            rs1 = ps1.executeQuery();
 
-            int[] anchos = {50, 200, 50, 50};
+            while (rs1.next()) {
+                int idCliente = 0;
+                idCliente = rs1.getInt(1);
 
-            for (int i = 0; i < tblProducts.getColumnCount(); i++) {
-                tblProducts.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
-            }
+                String sql = "SELECT id_producto, nombre_producto, cantidad, precio_total, id_cliente, fecha FROM compras WHERE id_cliente = ? " + where;
+                ps = con.prepareStatement(sql);
+                ps.setInt(1, idCliente);
+                rs = ps.executeQuery();
 
-            while (rs.next()) {
-                Object[] filas = new Object[cantidadColumnas];
-                for (int i = 0; i < cantidadColumnas; i++) {
-                    filas[i] = rs.getObject(i + 1);
+                ResultSetMetaData rsMd = (ResultSetMetaData) rs.getMetaData();
+                int cantidadColumnas = rsMd.getColumnCount();
+
+                modelo.addColumn("ID Producto");
+                modelo.addColumn("Nombre Producto");
+                modelo.addColumn("Cantidad");
+                modelo.addColumn("Precio total");
+                modelo.addColumn("ID Cliente");
+                modelo.addColumn("Fecha");
+
+                int[] anchos = {50, 50, 50, 50, 50, 50};
+                for (int i = 0; i < tblProducts.getColumnCount(); i++) {
+                    tblProducts.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
                 }
-                modelo.addRow(filas);
+                while (rs.next()) {
+                    Object[] filas = new Object[cantidadColumnas];
+                    for (int i = 0; i < cantidadColumnas; i++) {
+                        filas[i] = rs.getObject(i + 1);
+                    }
+                    modelo.addRow(filas);
+                }
             }
-
         } catch (SQLException ex) {
-            System.err.println(ex.toString());
+            System.err.println("Error: " + ex.toString());
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
