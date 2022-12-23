@@ -1,7 +1,6 @@
 package principal.admins;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.sql.*;
 import javax.swing.*;
 import principal.administracion.*;
@@ -11,9 +10,9 @@ public class Admins extends javax.swing.JFrame {
 
     public Admins() {
         initComponents();
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         JPanel p1 = new AdminProductsR();
         changePanels(p1);
-        cerrar();
     }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -28,6 +27,11 @@ public class Admins extends javax.swing.JFrame {
         content = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnRegresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/admins/RegresarVerde.png"))); // NOI18N
@@ -40,7 +44,7 @@ public class Admins extends javax.swing.JFrame {
                 btnRegresarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 670, -1, -1));
+        getContentPane().add(btnRegresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 700, -1, -1));
 
         btnRegis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/admins/ResP.png"))); // NOI18N
         btnRegis.setToolTipText("");
@@ -114,6 +118,7 @@ public class Admins extends javax.swing.JFrame {
 
     //Nos regresa al Login
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        cerrar();
         dispose();
         JFrame frameLogin = new Login();
         frameLogin.setResizable(false);
@@ -125,6 +130,7 @@ public class Admins extends javax.swing.JFrame {
 
     //Nos cierra el programa
     private void salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirActionPerformed
+        cerrar();
         dispose();
         System.exit(0);
     }//GEN-LAST:event_salirActionPerformed
@@ -134,6 +140,10 @@ public class Admins extends javax.swing.JFrame {
         JPanel p3 = new AdminProveedores();
         changePanels(p3);
     }//GEN-LAST:event_btnAdminPEActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        cerrar();
+    }//GEN-LAST:event_formWindowClosing
 
     //Metodo para cambiar los paneles del Frame
     private void changePanels(JPanel p) {
@@ -145,22 +155,19 @@ public class Admins extends javax.swing.JFrame {
         content.revalidate();
         content.repaint();
     }
-    
+
     private void cerrar() {
-        try {
-            this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    eliminarUsuarioActual();
-                }
-            });
-            this.setVisible(true);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e.getMessage());
+        String botones[] = {"Cerrar", "Cancelar"};
+        int eleccion = JOptionPane.showOptionDialog(this, "¿Desea cerrar la aplicacion?", "Titulo", 0, 0, null, botones, this);
+
+        if (eleccion == JOptionPane.YES_OPTION) {
+            eliminarUsuarioActual();
+            System.exit(0);
+        } else if (eleccion == JOptionPane.NO_OPTION) {
+            System.out.println("Se cancelo el cierre");
         }
     }
-    
+
     private void eliminarUsuarioActual() {
         try {
             PreparedStatement ps = null;
