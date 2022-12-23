@@ -32,6 +32,7 @@ public class Tienda extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         txtSaldo = new javax.swing.JTextField();
         txtAñadirSaldo = new javax.swing.JTextField();
+        actualizarSaldo = new javax.swing.JButton();
         cbxSaldo = new javax.swing.JComboBox<>();
         btnAgregarSaldo = new javax.swing.JButton();
         butonRegresar = new javax.swing.JButton();
@@ -92,9 +93,21 @@ public class Tienda extends javax.swing.JFrame {
         getContentPane().add(salir, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 730, -1, 20));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/saldo.png"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 560, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 560, -1, -1));
         getContentPane().add(txtSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 610, 80, -1));
         getContentPane().add(txtAñadirSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 610, 80, -1));
+
+        actualizarSaldo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/tienda/actualizar.png"))); // NOI18N
+        actualizarSaldo.setToolTipText("Actualizar Saldo");
+        actualizarSaldo.setBorder(null);
+        actualizarSaldo.setBorderPainted(false);
+        actualizarSaldo.setContentAreaFilled(false);
+        actualizarSaldo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarSaldoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(actualizarSaldo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 560, -1, -1));
 
         cbxSaldo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Saldo", "Agregar Saldo" }));
         cbxSaldo.addItemListener(new java.awt.event.ItemListener() {
@@ -214,11 +227,10 @@ public class Tienda extends javax.swing.JFrame {
 
                     if (res > 0) {
                         JOptionPane.showMessageDialog(null, "Dinero agregado");
-                        cbxSaldo.setSelectedIndex(0);
                         txtAñadirSaldo.setText(null);
+                        camposSaldo(false, true, false);
+                        cbxSaldo.setSelectedIndex(0);
                         mostrarSaldo();
-                        txtSaldo.setVisible(true);
-                        btnAgregarSaldo.setVisible(false);
                     } else {
                         JOptionPane.showMessageDialog(null, "Error al agregar dinero");
                     }
@@ -234,15 +246,17 @@ public class Tienda extends javax.swing.JFrame {
     private void cbxSaldoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxSaldoItemStateChanged
         if (Objects.equals(cbxSaldo.getSelectedItem(), "Saldo")) {
             mostrarSaldo();
-            txtAñadirSaldo.setVisible(false);
-            txtSaldo.setVisible(true);
-            btnAgregarSaldo.setVisible(false);
+            camposSaldo(false, true, false);
         } else if (Objects.equals(cbxSaldo.getSelectedItem(), "Agregar Saldo")) {
-            txtSaldo.setVisible(false);
-            txtAñadirSaldo.setVisible(true);
-            btnAgregarSaldo.setVisible(true);
+            camposSaldo(true, false, true);
         }
     }//GEN-LAST:event_cbxSaldoItemStateChanged
+
+    private void actualizarSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarSaldoActionPerformed
+        mostrarSaldo();
+        cbxSaldo.setSelectedIndex(0);
+        camposSaldo(false, true, false);
+    }//GEN-LAST:event_actualizarSaldoActionPerformed
     
     private void mostrarSaldo() {
         try {
@@ -393,10 +407,17 @@ public class Tienda extends javax.swing.JFrame {
         }
     }
     
+    private void camposSaldo(boolean txtAñadirSaldoVisible, boolean saldoVisible, boolean btnSaldoVisible) {
+        txtAñadirSaldo.setVisible(txtAñadirSaldoVisible);
+        txtSaldo.setVisible(saldoVisible);
+        btnAgregarSaldo.setVisible(btnSaldoVisible);
+    }
+    
     public static boolean validarSaldo(String precio) {
         return precio.matches("^[0-9]{1}[0-9]+$");
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton actualizarSaldo;
     private javax.swing.JButton btnAgregarSaldo;
     private javax.swing.JButton butonRegresar;
     private javax.swing.JButton carrito;

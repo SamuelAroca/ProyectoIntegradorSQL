@@ -170,18 +170,47 @@ public class Carrito extends javax.swing.JPanel {
 
                 sumaTotal += sumatoria;
 
-                PreparedStatement ps2 = null;
-                ps2 = conn.prepareStatement("INSERT INTO compras (id_producto, nombre_producto, cantidad, precio_total, id_cliente) VALUES (?,?,?,?,?)");
-                ps2.setString(1, id_producto);
-                ps2.setString(2, nombre);
-                ps2.setInt(3, cantidad);
-                ps2.setInt(4, sumaTotal);
-                ps2.setInt(5, id_cliente);
-                res = ps2.executeUpdate();
+                PreparedStatement ps3 = null;
+                ResultSet rs2 = null;
+
+                ps3 = conn.prepareStatement("SELECT saldo FROM users WHERE identificacion = ?");
+                ps3.setInt(1, id_cliente);
+                rs2 = ps3.executeQuery();
+                rs2.next();
+                int saldoActual = rs2.getInt(1);
+
+                if (sumaTotal <= saldoActual && sumaTotal > 0) {
+                    int saldoNuevo = saldoActual - sumaTotal;
+
+                    PreparedStatement ps2 = null;
+                    ps2 = conn.prepareStatement("INSERT INTO compras (id_producto, nombre_producto, cantidad, precio_total, id_cliente) VALUES (?,?,?,?,?)");
+                    ps2.setString(1, id_producto);
+                    ps2.setString(2, nombre);
+                    ps2.setInt(3, cantidad);
+                    ps2.setInt(4, sumaTotal);
+                    ps2.setInt(5, id_cliente);
+
+                    PreparedStatement ps4 = null;
+
+                    ps4 = conn.prepareStatement("UPDATE users SET saldo = ? WHERE identificacion = ?");
+                    ps4.setInt(1, saldoNuevo);
+                    ps4.setInt(2, id_cliente);
+                    int res1 = ps4.executeUpdate();
+
+                    if (res1 > 0) {
+                        System.out.println("Update saldo correcto");
+                        res = ps2.executeUpdate();
+                    } else {
+                        System.out.println("Error al actualizar saldo");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Saldo insuficiente");
+                }
             }
             if (res > 0) {
                 System.out.println("Compra guardada");
                 JOptionPane.showMessageDialog(null, "Compra realizada con exito");
+                limpiar();
                 PreparedStatement ps1 = null;
                 ps1 = conn.prepareStatement("DELETE FROM carrito");
 
@@ -195,7 +224,6 @@ public class Carrito extends javax.swing.JPanel {
                 }
             } else {
                 System.out.println("Error al guardar la compra");
-                JOptionPane.showMessageDialog(null, "Ocurrio un error en la compra");
             }
         } catch (SQLException e) {
             System.out.println("Error: " + e);
