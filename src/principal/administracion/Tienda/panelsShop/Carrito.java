@@ -165,7 +165,7 @@ public class Carrito extends javax.swing.JPanel {
                 rs1 = ps1.executeQuery();
                 rs1.next();
                 int id_cliente = rs1.getInt(1);
-                
+
                 int sumatoria = precio * cantidad;
 
                 sumaTotal += sumatoria;
@@ -178,16 +178,15 @@ public class Carrito extends javax.swing.JPanel {
                 ps2.setInt(4, sumaTotal);
                 ps2.setInt(5, id_cliente);
                 res = ps2.executeUpdate();
-
             }
             if (res > 0) {
                 System.out.println("Compra guardada");
                 JOptionPane.showMessageDialog(null, "Compra realizada con exito");
                 PreparedStatement ps1 = null;
                 ps1 = conn.prepareStatement("DELETE FROM carrito");
-                
+
                 int res1 = ps1.executeUpdate();
-                
+
                 if (res1 > 0) {
                     System.out.println("Carrito eliminado");
                     rellenarTablaCarrito();

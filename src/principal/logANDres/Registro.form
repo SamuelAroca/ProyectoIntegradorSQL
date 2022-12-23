@@ -232,7 +232,7 @@
                   <Color blue="54" green="54" red="54" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/principal/icons/logANDres/Frame 3 (1).png"/>
+                  <Image iconType="3" name="/principal/icons/logANDres/Frame 3.png"/>
                 </Property>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="null"/>
@@ -245,7 +245,7 @@
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                  <AbsoluteConstraints x="320" y="620" width="220" height="-1"/>
+                  <AbsoluteConstraints x="320" y="620" width="220" height="60"/>
                 </Constraint>
               </Constraints>
             </Component>

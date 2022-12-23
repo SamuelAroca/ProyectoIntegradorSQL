@@ -175,7 +175,6 @@ public class Login extends javax.swing.JFrame {
                         frameTienda.setResizable(false);
                         frameTienda.setSize(1346, 805);
                         frameTienda.setLocationRelativeTo(null);
-                        frameTienda.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         frameTienda.setVisible(true);
                     } else if (Objects.equals(comboTipoUser.getSelectedItem(), "Administrador")) {
                         usuarioActual(id, nombre, cantraseña);
@@ -184,7 +183,6 @@ public class Login extends javax.swing.JFrame {
                         frameAdmin.setResizable(false);
                         frameAdmin.setSize(1346, 805);
                         frameAdmin.setLocationRelativeTo(null);
-                        frameAdmin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         frameAdmin.setVisible(true);
                     } else {
                         JOptionPane.showMessageDialog(null, "Porfavor Selecciona un tipo de usuario");

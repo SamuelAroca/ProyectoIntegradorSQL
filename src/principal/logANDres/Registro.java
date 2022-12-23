@@ -113,7 +113,7 @@ public class Registro extends javax.swing.JFrame {
         jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 520, -1, -1));
 
         btnRegis.setForeground(new java.awt.Color(84, 84, 84));
-        btnRegis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/logANDres/Frame 3 (1).png"))); // NOI18N
+        btnRegis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/logANDres/Frame 3.png"))); // NOI18N
         btnRegis.setBorder(null);
         btnRegis.setBorderPainted(false);
         btnRegis.setContentAreaFilled(false);
@@ -122,7 +122,7 @@ public class Registro extends javax.swing.JFrame {
                 btnRegisActionPerformed(evt);
             }
         });
-        jPanel2.add(btnRegis, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 620, 220, -1));
+        jPanel2.add(btnRegis, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 620, 220, 60));
 
         lblTitle1.setForeground(new java.awt.Color(163, 156, 156));
         lblTitle1.setText("Ingresa tus credenciales");
