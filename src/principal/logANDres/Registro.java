@@ -198,10 +198,10 @@ public class Registro extends javax.swing.JFrame {
                             }
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "Digite un Nombre validao\n Mayúscula Inicial");
+                        JOptionPane.showMessageDialog(null, "Digite un Nombre valido\n Mayúscula Inicial");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Digite un ID validao\n 5 numerós minimo");
+                    JOptionPane.showMessageDialog(null, "Digite un ID valido\n 5 numerós minimo");
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Por favor rellene todos los espacios");
@@ -278,7 +278,7 @@ public class Registro extends javax.swing.JFrame {
     }
 
     public static boolean validarId(String id) {
-        return id.matches("^[0-9]{5}+");
+        return id.matches("^[0-9]{5}[0-9]+");
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton admins;
