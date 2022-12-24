@@ -48,7 +48,7 @@ public class PassWordAdmin extends javax.swing.JFrame {
         });
         getContentPane().add(regresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, -1, -1));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/admins/Frame 6 (1).png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/admins/Frame 6.png"))); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(-40, -10, 520, 80));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/admins/Rectangle 2.png"))); // NOI18N

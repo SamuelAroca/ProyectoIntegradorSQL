@@ -158,7 +158,7 @@ public class AdminProveedores extends javax.swing.JPanel {
                     ps.setString(3, txtTipoProducto.getText());
                     ps.execute();
 
-                    JOptionPane.showMessageDialog(null, "Producto Guardado");
+                    JOptionPane.showMessageDialog(null, "Proovedor Guardado");
                     cbxTipoProducto.setSelectedIndex(0);
                     rellenarTablaProveedor();
                     limpiar();

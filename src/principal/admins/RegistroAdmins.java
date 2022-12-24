@@ -102,7 +102,7 @@ public class RegistroAdmins extends javax.swing.JFrame {
         jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 520, -1, -1));
 
         btnRegis.setForeground(new java.awt.Color(84, 84, 84));
-        btnRegis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/admins/Frame 3 (1).png"))); // NOI18N
+        btnRegis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/icons/admins/Frame 3.png"))); // NOI18N
         btnRegis.setBorder(null);
         btnRegis.setBorderPainted(false);
         btnRegis.setContentAreaFilled(false);
